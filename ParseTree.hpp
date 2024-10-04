@@ -71,6 +71,16 @@ public:
 		}
 		throw std::runtime_error("Invalid binary operation: Invalid operation");
 	}
+
+	void setValueA(std::unique_ptr<ExpressionNode<T>> value)
+	{
+		mValueA = std::move(value);
+	}
+
+	void setValueB(std::unique_ptr<ExpressionNode<T>> value)
+	{
+		mValueB = std::move(value);
+	}
 protected:
 	std::unique_ptr<ExpressionNode<T>> mValueA;
 	std::unique_ptr<ExpressionNode<T>> mValueB;
