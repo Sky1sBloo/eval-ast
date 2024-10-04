@@ -91,7 +91,13 @@ template <typename T>
 class PrintNode : public StatementNode
 {
 public:
-	PrintNode(std::unique_ptr<ExpressionNode<T>> expression);
+	PrintNode() :
+		mExpression(nullptr)
+	{}
+
+	PrintNode(std::unique_ptr<ExpressionNode<T>> expression) :
+		mExpression(std::move(expression)) {}
+
 	void doStatement() override
 	{
 		if (!mExpression)
@@ -99,6 +105,11 @@ public:
 			throw std::runtime_error("Invalid print operation: Expression is nullptr");
 		}
 		std::cout << mExpression->getValue() << std::endl;
+	}
+
+	void setExpression(std::unique_ptr<ExpressionNode<T>> expression)
+	{
+		mExpression = std::move(expression);
 	}
 private:
 	std::unique_ptr<ExpressionNode<T>> mExpression;
