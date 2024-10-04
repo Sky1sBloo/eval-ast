@@ -3,6 +3,8 @@
 #include <memory>
 #include <stdexcept>
 
+#include "BinaryOperators.hpp"
+
 class StatementNode
 {
 public:
@@ -30,22 +32,51 @@ private:
 };
 
 template <typename T>
-class AdditionNode : public ExpressionNode<T>
+class BinaryOperationNode : public ExpressionNode<T>
 {
 public:
-	AdditionNode(std::unique_ptr<ExpressionNode<T>> valueA, std::unique_ptr<ExpressionNode<T>> valueB) :
+	BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> valueA, std::unique_ptr<ExpressionNode<T>> valueB) :
+		mOperation(operation),
 		mValueA(std::move(valueA)),
-		mValueB(std::move(valueB)) {}
-
-	T getValue() const override
+		mValueB(std::move(valueB)) 
 	{
 		if (!mValueA || !mValueB)
 		{
-			throw std::runtime_error("Invalid operation on addition: One of the values is nullptr");
+			throw std::runtime_error("Invalid binary operation: One of the values is nullptr");
 		}
-		return mValueA->getValue() + mValueB->getValue();
 	}
-private:
+
+	T getValue() const override
+	{
+		switch (mOperation)
+		{
+			case BinaryOperators::ADDITION:
+				return mValueA->getValue() + mValueB->getValue();
+			case BinaryOperators::SUBTRACTION:
+				return mValueA->getValue() - mValueB->getValue();
+			case BinaryOperators::MULTIPLICATION:
+				return mValueA->getValue() * mValueB->getValue();
+			case BinaryOperators::DIVISION:
+				return mValueA->getValue() / mValueB->getValue();
+		}
+		throw std::runtime_error("Invalid binary operation: Invalid operation");
+	}
+protected:
 	std::unique_ptr<ExpressionNode<T>> mValueA;
 	std::unique_ptr<ExpressionNode<T>> mValueB;
+	const BinaryOperators mOperation;
 };
+/*
+template <typename T>
+class AdditionNode : public BinaryOperationNode<T>
+{
+public:
+	AdditionNode(std::unique_ptr<ExpressionNode<T>> valueA, std::unique_ptr<ExpressionNode<T>> valueB) :
+		BinaryOperationNode<T>(std::move(valueA), std::move(valueB))
+	{}
+
+	T getValue() const override
+	{
+		return this->mValueA->getValue() + this->mValueB->getValue();
+	}
+}; */
