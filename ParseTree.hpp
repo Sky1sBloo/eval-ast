@@ -111,6 +111,11 @@ public:
 	{
 		mExpression = std::move(expression);
 	}
+
+	const ExpressionNode<T>& getExpression() const
+	{
+		return *mExpression;
+	}
 private:
 	std::unique_ptr<ExpressionNode<T>> mExpression;
 };
