@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 
@@ -11,6 +12,8 @@ public:
 	virtual ~StatementNode() {};
 	virtual void doStatement() = 0;
 };
+
+
 
 template <typename T>
 class ExpressionNode 
@@ -40,7 +43,7 @@ public:
 		mValueA(std::move(valueA)),
 		mValueB(std::move(valueB)) 
 	{
-		if (!mValueA || !mValueB)
+		if (valueA == nullptr || valueB == nullptr)
 		{
 			throw std::runtime_error("Invalid binary operation: One of the values is nullptr");
 		}
@@ -66,17 +69,22 @@ protected:
 	std::unique_ptr<ExpressionNode<T>> mValueB;
 	const BinaryOperators mOperation;
 };
-/*
+
 template <typename T>
-class AdditionNode : public BinaryOperationNode<T>
+class PrintNode : public StatementNode
 {
 public:
-	AdditionNode(std::unique_ptr<ExpressionNode<T>> valueA, std::unique_ptr<ExpressionNode<T>> valueB) :
-		BinaryOperationNode<T>(std::move(valueA), std::move(valueB))
-	{}
-
-	T getValue() const override
+	PrintNode(std::unique_ptr<ExpressionNode<T>> expression);
+	void doStatement() override
 	{
-		return this->mValueA->getValue() + this->mValueB->getValue();
+		if (!mExpression)
+		{
+			throw std::runtime_error("Invalid print operation: Expression is nullptr");
+		}
+		std::cout << mExpression->getValue() << std::endl;
 	}
-}; */
+private:
+	std::unique_ptr<ExpressionNode<T>> mExpression;
+};
+
+
