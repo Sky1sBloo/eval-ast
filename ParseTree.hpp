@@ -24,11 +24,11 @@ public:
 };
 
 template <typename T>
-class ValueNode : public ExpressionNode<T>
+class ConstantNode : public ExpressionNode<T>
 {
 public:
-	ValueNode(std::unique_ptr<T> value) : mValue(std::move(value)) {}
-	~ValueNode() override {}
+	ConstantNode(std::unique_ptr<T> value) : mValue(std::move(value)) {}
+	~ConstantNode() override {}
 	T getValue() const override { return *mValue; }
 private:
 	std::unique_ptr<T> mValue;
