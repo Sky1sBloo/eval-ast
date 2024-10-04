@@ -38,19 +38,26 @@ template <typename T>
 class BinaryOperationNode : public ExpressionNode<T>
 {
 public:
-	BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> valueA, std::unique_ptr<ExpressionNode<T>> valueB) :
-		mOperation(operation),
-		mValueA(std::move(valueA)),
-		mValueB(std::move(valueB)) 
+	BinaryOperationNode(BinaryOperators operation) :
+		mValueA(nullptr),
+		mValueB(nullptr),
+		mOperation(operation)
 	{
-		if (valueA == nullptr || valueB == nullptr)
-		{
-			throw std::runtime_error("Invalid binary operation: One of the values is nullptr");
-		}
+	}
+
+	BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> valueA, std::unique_ptr<ExpressionNode<T>> valueB) :
+		mValueA(std::move(valueA)),
+		mValueB(std::move(valueB)),
+		mOperation(operation)
+	{
 	}
 
 	T getValue() const override
 	{
+		if (mValueA == nullptr || mValueB == nullptr)
+		{
+			throw std::runtime_error("Invalid binary operation: One of the values is nullptr");
+		}
 		switch (mOperation)
 		{
 			case BinaryOperators::ADDITION:
