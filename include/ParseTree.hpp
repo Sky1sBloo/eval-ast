@@ -81,6 +81,22 @@ public:
 	{
 		mValueB = std::move(value);
 	}
+
+    /**
+     * Appends a new binary operation on mValueA or B depending on boolean appendOnLeft
+     *
+     * @tparam T holder type generally for the ConstantNode
+     * @tparam expression New Binary operation to be added
+     * @param appendOnLeft Appends on either mValueA if true or mValueB if false
+    */
+    void appendBinaryOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation, bool appendOnLeft)
+    {
+        std::unique_ptr<ExpressionNode<T>> tempValue = std::move(appendOnLeft ? mValueA : mValueB);
+        newBinaryOperation->setValueA(std::move(tempValue));
+
+        (appendOnLeft ? mValueA : mValueB) = std::move(newBinaryOperation);
+    }
+
 protected:
 	std::unique_ptr<ExpressionNode<T>> mValueA;
 	std::unique_ptr<ExpressionNode<T>> mValueB;
