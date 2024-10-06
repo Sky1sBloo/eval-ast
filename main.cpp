@@ -2,6 +2,7 @@
 
 int main()
 {
-    ParseTreeBuilder parseTreeBuilder("1+1");
+    std::string operation("1+11");
+    ParseTreeBuilder parseTreeBuilder(operation);
     parseTreeBuilder.generateParseTree();
 }
