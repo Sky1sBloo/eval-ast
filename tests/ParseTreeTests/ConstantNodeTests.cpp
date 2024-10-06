@@ -1,3 +1,4 @@
+#include <array>
 #include <gtest/gtest.h>
 #include "ParseTree.hpp"
 
@@ -16,3 +17,4 @@ TEST(ParseTreeTest, ConstantNodeTest)
     EXPECT_FLOAT_EQ(constantFloatNode.getValue(), constantFloatValue);
     EXPECT_TRUE(constantStringNode.getValue().compare(constantStringValue) == 0);
 }
+
