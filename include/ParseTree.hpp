@@ -120,4 +120,3 @@ private:
 	std::unique_ptr<ExpressionNode<T>> mExpression;
 };
 
-
