@@ -24,7 +24,7 @@ TEST(ParseTreeTest, BinaryOperationConstructor_Integer)
     EXPECT_EQ(binaryIntDivideOperation.getValue(), operationValues[0] / operationValues[1]);
 }
 
-TEST(ParseTreeTest, BinaryOperationConstructor_FLOAT)
+TEST(ParseTreeTest, BinaryOperationConstructor_Float)
 {
     std::array<float, 2> operationValues  = {1.f, 2.f};
 
