@@ -88,8 +88,9 @@ TEST(ParseTreeTest, BinaryOperationBuilder_FLOAT)
     binaryFloatDivideOperation.setValueA(std::make_unique<ConstantNode<float>>(operationValues[0]));
     binaryFloatDivideOperation.setValueB(std::make_unique<ConstantNode<float>>(operationValues[1]));
 
-    EXPECT_EQ(binaryFloatAddOperation.getValue(), operationValues[0] + operationValues[1]);
-    EXPECT_EQ(binaryFloatSubtractOperation.getValue(), operationValues[0] - operationValues[1]);
-    EXPECT_EQ(binaryFloatMultiplyOperation.getValue(), operationValues[0] * operationValues[1]);
-    EXPECT_EQ(binaryFloatDivideOperation.getValue(), operationValues[0] / operationValues[1]); 
+    EXPECT_FLOAT_EQ(binaryFloatAddOperation.getValue(), operationValues[0] + operationValues[1]);
+    EXPECT_FLOAT_EQ(binaryFloatSubtractOperation.getValue(), operationValues[0] - operationValues[1]);
+    EXPECT_FLOAT_EQ(binaryFloatMultiplyOperation.getValue(), operationValues[0] * operationValues[1]);
+    EXPECT_FLOAT_EQ(binaryFloatDivideOperation.getValue(), operationValues[0] / operationValues[1]); 
 }
+
