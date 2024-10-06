@@ -1,6 +1,7 @@
 add_executable(
     eval-ast-unit-tests
     ParseTreeTests/ConstantNodeTests.cpp
+    ParseTreeTests/BinaryOperationTests.cpp
 )
 
 target_link_libraries(
