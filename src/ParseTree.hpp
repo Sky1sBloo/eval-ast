@@ -6,13 +6,13 @@
 
 #include "BinaryOperators.hpp"
 
+
 class StatementNode
 {
 public:
 	virtual ~StatementNode() {};
 	virtual void doStatement() = 0;
 };
-
 
 
 template <typename T>
@@ -22,6 +22,7 @@ public:
 	virtual ~ExpressionNode<T>() {};
 	virtual T getValue() const = 0;
 };
+
 
 template <typename T>
 class ConstantNode : public ExpressionNode<T>
@@ -33,6 +34,7 @@ public:
 private:
 	T mValue;
 };
+
 
 template <typename T>
 class BinaryOperationNode : public ExpressionNode<T>
@@ -115,6 +117,7 @@ protected:
 	std::unique_ptr<ExpressionNode<T>> mValueB;
 	const BinaryOperators mOperation;
 };
+
 
 template <typename T>
 class PrintNode : public StatementNode
