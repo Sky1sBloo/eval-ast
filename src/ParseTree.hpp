@@ -45,6 +45,19 @@ public:
 	{
 	}
 
+    /**
+     * Constructor for appending binary operation
+     *
+     * @operation that will be used
+     * @value ValueB that will be appended
+     */
+    BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> value) :
+        mValueA(nullptr),
+        mValueB(std::move(value)),
+        mOperation(operation)
+    {
+    }
+
 	BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> valueA, std::unique_ptr<ExpressionNode<T>> valueB) :
 		mValueA(std::move(valueA)),
 		mValueB(std::move(valueB)),
