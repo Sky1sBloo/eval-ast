@@ -3,9 +3,29 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <variant>
 
 #include "BinaryOperators.hpp"
 
+class StatementNode;
+
+template <typename T>
+class ExpressionNode;
+
+template <typename T>
+class ConstantNode;
+
+template <typename T>
+class BinaryOperationNode;
+
+template <typename T>
+class PrintNode;
+
+template <typename T>
+using ExpressionNodeContainer = std::variant<
+    std::unique_ptr<ExpressionNode<T>>,
+    std::unique_ptr<ConstantNode<T>>,
+    std::unique_ptr<BinaryOperationNode<T>>>;
 
 class StatementNode
 {
@@ -41,8 +61,8 @@ class BinaryOperationNode : public ExpressionNode<T>
 {
 public:
 	BinaryOperationNode(BinaryOperators operation) :
-		mValueA(nullptr),
-		mValueB(nullptr),
+		mValueA(std::unique_ptr<ExpressionNode<T>>(nullptr)),
+		mValueB(std::unique_ptr<ExpressionNode<T>>(nullptr)),
 		mOperation(operation)
 	{
 	}
@@ -54,7 +74,7 @@ public:
      * @value ValueB that will be appended
      */
     BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> value) :
-        mValueA(nullptr),
+		mValueA(std::unique_ptr<ExpressionNode<T>>(nullptr)),
         mValueB(std::move(value)),
         mOperation(operation)
     {
@@ -69,33 +89,42 @@ public:
 
 	T getValue() const override
 	{
-		if (mValueA == nullptr || mValueB == nullptr)
-		{
-			throw std::runtime_error("Invalid binary operation: One of the values is nullptr");
-		}
-		switch (mOperation)
-		{
-			case BinaryOperators::ADDITION:
-				return mValueA->getValue() + mValueB->getValue();
-			case BinaryOperators::SUBTRACTION:
-				return mValueA->getValue() - mValueB->getValue();
-			case BinaryOperators::MULTIPLICATION:
-				return mValueA->getValue() * mValueB->getValue();
-			case BinaryOperators::DIVISION:
-				return mValueA->getValue() / mValueB->getValue();
-		}
-		throw std::runtime_error("Invalid binary operation: Invalid operation");
-	}
+        T value = std::visit([this](const auto& valueA, const auto& valueB) {
+            if (valueA == nullptr || valueB == nullptr) {
+			    throw std::runtime_error("Invalid binary operation: One of the values is nullptr");
+            }
 
-	void setValueA(std::unique_ptr<ExpressionNode<T>> value)
+            switch (mOperation)
+	    	{
+	    		case BinaryOperators::ADDITION:
+	    			return valueA->getValue() + valueB->getValue();
+	    		case BinaryOperators::SUBTRACTION:
+	    			return valueA->getValue() - valueB->getValue();
+	    		case BinaryOperators::MULTIPLICATION:
+	    			return valueA->getValue() * valueB->getValue();
+	    		case BinaryOperators::DIVISION:
+	    			return valueA->getValue() / valueB->getValue();
+	    	}
+	    	throw std::runtime_error("Invalid binary operation: Invalid operation");  
+
+
+        }, mValueA, mValueB);
+
+        return value;
+    }
+
+	void setValueA(ExpressionNodeContainer<T>&& value)
 	{
 		mValueA = std::move(value);
 	}
 
-	void setValueB(std::unique_ptr<ExpressionNode<T>> value)
+	void setValueB(ExpressionNodeContainer<T>&& value)
 	{
 		mValueB = std::move(value);
 	}
+
+    BinaryOperators getOperation() const { return mOperation; }
+    int getOperationPrecedence() const { return operatorPrecedence.at(mOperation); }
 
     /**
      * Appends a new binary operation on mValueA or B depending on boolean appendOnLeft
@@ -106,15 +135,18 @@ public:
     */
     void appendBinaryOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation, bool appendOnLeft)
     {
-        std::unique_ptr<ExpressionNode<T>> tempValue = std::move(appendOnLeft ? mValueA : mValueB);
+        
+        ExpressionNodeContainer<T> tempValue = std::move(appendOnLeft ? mValueA : mValueB);
+        
         newBinaryOperation->setValueA(std::move(tempValue));
+        
 
         (appendOnLeft ? mValueA : mValueB) = std::move(newBinaryOperation);
     }
 
 protected:
-	std::unique_ptr<ExpressionNode<T>> mValueA;
-	std::unique_ptr<ExpressionNode<T>> mValueB;
+    ExpressionNodeContainer<T> mValueA;
+    ExpressionNodeContainer<T> mValueB;
 	const BinaryOperators mOperation;
 };
 
