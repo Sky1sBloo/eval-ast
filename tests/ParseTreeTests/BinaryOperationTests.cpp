@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <array>
 #include "BinaryOperators.hpp"
 #include "ParseTree.hpp"
 
