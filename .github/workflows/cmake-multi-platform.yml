@@ -70,4 +70,9 @@ jobs:
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: ${{ steps.strings.outputs.build-output-dir }}/tests/eval-ast-unit-tests
+      run: |
+        if [ "${{ matrix.os }}" == "ubuntu-latest"; then
+          ${{ steps.strings.outputs.build-output-dir }}/tests/eval-ast-unit-tests
+        else
+          ${{ steps.strings.outputs.build-output-dir }}\tests\eval-ast-unit-tests
+        fi
