@@ -68,11 +68,10 @@ jobs:
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
-    - name: Test
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: |
-        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-          ${{ steps.strings.outputs.build-output-dir }}/tests/eval-ast-unit-tests
-        else
-          ${{ steps.strings.outputs.build-output-dir }}\tests\eval-ast-unit-tests
-        fi
+    - name: Test-Ubuntu
+      if: matrix-os == 'ubuntu-latest'
+      run: ${{ steps.strings.outputs.build-output-dir }}/tests/eval-ast-unit-tests
+
+    - name: Test-Windows
+      if: matrix.os == 'windows-latest'
+      run: ${{ steps.strings.outputs.build-output-dir }}\tests\eval-ast-unit-tests
