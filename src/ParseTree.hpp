@@ -135,7 +135,7 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
                 std::get<std::unique_ptr<BinaryOperationNode<T>>>(mValueB)->getOperationPrecedence())
 
         {
-            auto& childPtr = std::get<std::unique_ptr<BinaryOperationNode<T>>>(mValueB);
+            auto &childPtr = std::get<std::unique_ptr<BinaryOperationNode<T>>>(mValueB);
             if (!childPtr)
             {
                 throw std::runtime_error("Operation appending, valueB is null");
@@ -149,12 +149,11 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
         mValueB = std::move(newBinaryOperation);
     }
 
-protected : ExpressionNodeContainer<T>
-                mValueA;
-ExpressionNodeContainer<T> mValueB;
-const BinaryOperators mOperation;
-}
-;
+  protected:
+    ExpressionNodeContainer<T> mValueA;
+    ExpressionNodeContainer<T> mValueB;
+    const BinaryOperators mOperation;
+};
 
 template <typename T> class PrintNode : public StatementNode
 {
