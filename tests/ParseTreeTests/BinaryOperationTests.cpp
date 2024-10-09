@@ -106,6 +106,6 @@ TEST(ParseTreeTest, BinaryOperationAppend)
     auto binarySubtractOperation = std::make_unique<BinaryOperationNode<int>>(operations[1]);
     binarySubtractOperation->setValueB(std::make_unique<ConstantNode<int>>(operationValues[2]));
 
-    binaryAddOperation->appendBinaryOperation(std::move(binarySubtractOperation), false);
+    binaryAddOperation->appendBinaryOperation(std::move(binarySubtractOperation));
     EXPECT_EQ(binaryAddOperation->getValue(), operationValues[0] + operationValues[1] - operationValues[2]);
 }
