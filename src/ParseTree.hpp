@@ -131,15 +131,19 @@ public:
      * @tparam expression New Binary operation to be added
      * @param appendOnLeft Appends on either mValueA if true or mValueB if false
     */
-    void appendBinaryOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation, bool appendOnLeft)
+    void appendBinaryOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation)
     {
-        
-        ExpressionNodeContainer<T> tempValue = std::move(appendOnLeft ? mValueA : mValueB);
-        
-        newBinaryOperation->setValueA(std::move(tempValue));
-        
-
-        (appendOnLeft ? mValueA : mValueB) = std::move(newBinaryOperation);
+        std::visit([this, newBinaryOperation](auto& child) {
+            if (newBinaryOperation->getOperationPrecedence() > child->getOperationPrecedence())
+            {
+                child->appendBinaryOperation(std::move(newBinaryOperation));
+                return;
+            }
+            
+            ExpressionNodeContainer<T> tempValue = std::move(child);
+            newBinaryOperation->setValueA(std::move(tempValue));
+            child = std::move(newBinaryOperation);
+        }, mValueB);
     }
 
 protected:

@@ -13,7 +13,7 @@ void ParseTreeBuilder::generateParseTree()
     testNode->setValueA(std::make_unique<ConstantNode<int>>(5));
     testNode->setValueB(std::make_unique<ConstantNode<int>>(3));
 
-    testNode->appendBinaryOperation(std::move(testNodeB), false);
+    testNode->appendBinaryOperation(std::move(testNodeB));
 
 
     std::cout << testNode->getValue() << std::endl;
