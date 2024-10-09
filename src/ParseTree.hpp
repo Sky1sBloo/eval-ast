@@ -130,26 +130,31 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
      */
     void appendBinaryOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation)
     {
-        std::visit(
-            [this, newBinaryOperation](auto &child) {
-                if (newBinaryOperation->getOperationPrecedence() > child->getOperationPrecedence())
-                {
-                    child->appendBinaryOperation(std::move(newBinaryOperation));
-                    return;
-                }
+        if (std::holds_alternative<std::unique_ptr<BinaryOperationNode<T>>>(mValueB) &&
+            newBinaryOperation->getOperationPrecedence() >
+                std::get<std::unique_ptr<BinaryOperationNode<T>>>(mValueB)->getOperationPrecedence())
 
-                ExpressionNodeContainer<T> tempValue = std::move(child);
-                newBinaryOperation->setValueA(std::move(tempValue));
-                child = std::move(newBinaryOperation);
-            },
-            mValueB);
+        {
+            auto& childPtr = std::get<std::unique_ptr<BinaryOperationNode<T>>>(mValueB);
+            if (!childPtr)
+            {
+                throw std::runtime_error("Operation appending, valueB is null");
+            }
+            childPtr->appendBinaryOperation(std::move(newBinaryOperation));
+            return;
+        }
+
+        ExpressionNodeContainer<T> tempValue = std::move(mValueB);
+        newBinaryOperation->setValueA(std::move(tempValue));
+        mValueB = std::move(newBinaryOperation);
     }
 
-  protected:
-    ExpressionNodeContainer<T> mValueA;
-    ExpressionNodeContainer<T> mValueB;
-    const BinaryOperators mOperation;
-};
+protected : ExpressionNodeContainer<T>
+                mValueA;
+ExpressionNodeContainer<T> mValueB;
+const BinaryOperators mOperation;
+}
+;
 
 template <typename T> class PrintNode : public StatementNode
 {
