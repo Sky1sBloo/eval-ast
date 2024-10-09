@@ -47,7 +47,7 @@ template <typename T>
 class ConstantNode : public ExpressionNode<T>
 {
 public:
-	ConstantNode(T value);
+	ConstantNode(T value) : mValue(value) {}
 	T getValue() const override { return mValue; }
 private:
 	T mValue;
