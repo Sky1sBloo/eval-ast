@@ -39,7 +39,6 @@ template <typename T>
 class ExpressionNode 
 {
 public:
-	virtual ~ExpressionNode<T>() {};
 	virtual T getValue() const = 0;
 };
 
@@ -48,8 +47,7 @@ template <typename T>
 class ConstantNode : public ExpressionNode<T>
 {
 public:
-	ConstantNode(T value) : mValue(value) {}
-	~ConstantNode() override {}
+	ConstantNode(T value);
 	T getValue() const override { return mValue; }
 private:
 	T mValue;
