@@ -1,6 +1,8 @@
 #include "BinaryOperators.hpp"
 #include "ParseTree.hpp"
 #include <gtest/gtest.h>
+#include <queue>
+#include <vector>
 
 TEST(ParseTreeTest, BinaryOperationConstructor_Integer)
 {
@@ -97,7 +99,7 @@ TEST(ParseTreeTest, BinaryOperationBuilder_FLOAT)
 TEST(ParseTreeTest, BinaryOperationAppend)
 {
     std::array<int, 3> operationValues = {1, 2, 3};
-    std::array<BinaryOperators, 2> operations{BinaryOperators::ADDITION, BinaryOperators::SUBTRACTION};
+    std::array<BinaryOperators, 2> operations = {BinaryOperators::ADDITION, BinaryOperators::SUBTRACTION};
 
     auto binaryAddOperation = std::make_unique<BinaryOperationNode<int>>(operations[0]);
     binaryAddOperation->setValueA(std::make_unique<ConstantNode<int>>(operationValues[0]));
@@ -108,4 +110,32 @@ TEST(ParseTreeTest, BinaryOperationAppend)
 
     binaryAddOperation->appendBinaryOperation(std::move(binarySubtractOperation));
     EXPECT_EQ(binaryAddOperation->getValue(), operationValues[0] + operationValues[1] - operationValues[2]);
+}
+
+TEST(ParseTreeTest, BinaryOperationPrecedenceAppending)
+{
+    std::array<float, 5> operationValues = {1.f, 2.f, 3.f, 4.f, 5.f};
+    std::array<BinaryOperators, 4> operations = {BinaryOperators::ADDITION, BinaryOperators::MULTIPLICATION,
+                                                 BinaryOperators::SUBTRACTION, BinaryOperators::DIVISION};
+
+    std::queue<std::unique_ptr<BinaryOperationNode<float>>> binaryOperationNodes;
+
+    binaryOperationNodes.push(
+        std::make_unique<BinaryOperationNode<float>>(operations[0], operationValues[0], operationValues[0 + 1]));
+    for (int i = 1; i < operations.size(); i++)
+    {
+        binaryOperationNodes.push(std::make_unique<BinaryOperationNode<float>>(operations[i], operationValues[i + 1]));
+    }
+
+    auto root = std::move(binaryOperationNodes.front());
+    binaryOperationNodes.pop();
+
+    while (!binaryOperationNodes.empty())
+    {
+        root = std::move(BinaryOperationNode<float>::appendBinaryOperation(std::move(root),
+                                                                           std::move(binaryOperationNodes.front())));
+        binaryOperationNodes.pop();
+    }
+
+    EXPECT_FLOAT_EQ(root->getValue(), 1.f + 2.f * 3.f - 4.f / 5.f);
 }
