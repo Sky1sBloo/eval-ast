@@ -2,7 +2,6 @@
 #include "ParseTree.hpp"
 #include <gtest/gtest.h>
 #include <queue>
-#include <vector>
 
 TEST(ParseTreeTest, BinaryOperationConstructor_Integer)
 {
