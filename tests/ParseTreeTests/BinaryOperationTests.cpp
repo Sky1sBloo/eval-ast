@@ -1,7 +1,11 @@
+#include <gtest/gtest.h>
+#include <array>
+#include <queue>
+
 #include "BinaryOperators.hpp"
 #include "ParseTree.hpp"
-#include <gtest/gtest.h>
-#include <queue>
+
+
 
 TEST(ParseTreeTest, BinaryOperationConstructor_Integer)
 {
