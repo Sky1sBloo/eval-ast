@@ -137,10 +137,37 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
     {
         return mOperation;
     }
+
     int getOperationPrecedence() const
     {
         return operatorPrecedence.at(mOperation);
     }
+
+    /**
+     * Use this for root operation and general append operation
+     *
+     * @tparam root Root node of the binary operation
+     * @tparam newBinaryOperation The operation to be appended
+     *
+     * @return The new root node if the new operation has lower precedence
+     */
+    static std::unique_ptr<BinaryOperationNode<T>> appendBinaryOperation(
+        std::unique_ptr<BinaryOperationNode<T>> root, std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation)
+    {
+        if (root->getOperationPrecedence() > newBinaryOperation->getOperationPrecedence())
+        {
+            newBinaryOperation->setValueA(std::move(root));
+            return std::move(newBinaryOperation);
+        }
+
+        root->appendBinaryOperation(std::move(newBinaryOperation));
+        return std::move(root);
+    }
+
+  protected:
+    ExpressionNodeContainer<T> mValueA;
+    ExpressionNodeContainer<T> mValueB;
+    const BinaryOperators mOperation;
 
     /**
      * Appends a new binary operation on mValueA or B depending on childDIr
@@ -172,32 +199,6 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
         newBinaryOperation->setValueA(std::move(tempValue));
         selectedValue = std::move(newBinaryOperation);
     }
-
-    /**
-     * Use this for root operation and general append operation
-     *
-     * @tparam root Root node of the binary operation
-     * @tparam newBinaryOperation The operation to be appended
-     *
-     * @return The new root node if the new operation has lower precedence
-     */
-    static std::unique_ptr<BinaryOperationNode<T>> appendBinaryOperation(
-        std::unique_ptr<BinaryOperationNode<T>> root, std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation)
-    {
-        if (root->getOperationPrecedence() > newBinaryOperation->getOperationPrecedence())
-        {
-            newBinaryOperation->setValueA(std::move(root));
-            return std::move(newBinaryOperation);
-        }
-
-        root->appendBinaryOperation(std::move(newBinaryOperation));
-        return std::move(root);
-    }
-
-  protected:
-    ExpressionNodeContainer<T> mValueA;
-    ExpressionNodeContainer<T> mValueB;
-    const BinaryOperators mOperation;
 };
 
 template <typename T> class PrintNode : public StatementNode
