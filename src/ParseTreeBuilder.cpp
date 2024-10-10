@@ -1,4 +1,5 @@
 #include "ParseTreeBuilder.hpp"
+#include "BinaryOperators.hpp"
 #include "ParseTree.hpp"
 
 ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseString(parseString)
@@ -8,23 +9,15 @@ ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseStrin
 void ParseTreeBuilder::generateParseTree()
 {
     auto testNode = std::make_unique<BinaryOperationNode<int>>(BinaryOperators::ADDITION);
-    auto testNodeB = std::make_unique<BinaryOperationNode<int>>(BinaryOperators::SUBTRACTION);
+    auto testNodeB = std::make_unique<BinaryOperationNode<int>>(BinaryOperators::MULTIPLICATION,
+                                                                std::make_unique<ConstantNode<int>>(2));
     testNode->setValueA(std::make_unique<ConstantNode<int>>(5));
     testNode->setValueB(std::make_unique<ConstantNode<int>>(3));
-    testNodeB->setValueB(std::make_unique<ConstantNode<int>>(2));
 
-    testNode->appendBinaryOperation(std::move(testNodeB), false);
 
-    PrintNode<int> root;
-    root.setExpression(std::move(testNode));
+    auto newBinaryRoot = BinaryOperationNode<int>::appendBinaryOperation(std::move(testNode), std::move(testNodeB));
+
+    PrintNode<int> root(std::move(newBinaryRoot));
+
     root.doStatement();
-
-    /*
-     * constructor version
-    PrintNode<int> root;
-    root.setExpression(std::make_unique<BinaryOperationNode<int>>(
-        BinaryOperators::SUBTRACTION, std::make_unique<ConstantNode<int>>(5), std::make_unique<ConstantNode<int>>(3)));
-    root.doStatement(); */
-
 }
-
