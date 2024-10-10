@@ -1,4 +1,5 @@
 #include "ParseTreeBuilder.hpp"
+#include "BinaryOperators.hpp"
 #include "ParseTree.hpp"
 
 ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseString(parseString)
@@ -8,14 +9,23 @@ ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseStrin
 void ParseTreeBuilder::generateParseTree()
 {
     auto testNode = std::make_unique<BinaryOperationNode<int>>(BinaryOperators::ADDITION);
-    auto testNodeB = std::make_unique<BinaryOperationNode<int>>(BinaryOperators::SUBTRACTION,
+    auto testNodeB = std::make_unique<BinaryOperationNode<int>>(BinaryOperators::MULTIPLICATION,
                                                                 std::make_unique<ConstantNode<int>>(2));
     testNode->setValueA(std::make_unique<ConstantNode<int>>(5));
     testNode->setValueB(std::make_unique<ConstantNode<int>>(3));
 
-    testNode->appendBinaryOperation(std::move(testNodeB));
+    PrintNode<int> root;
 
+    if (testNodeB->getOperationPrecedence() > testNode->getOperationPrecedence())
+    {
+        testNodeB->setValueA(std::move(testNode));
+        root.setExpression(std::move(testNodeB));
+    }
+    else
+    {
+        testNode->appendBinaryOperation(std::move(testNodeB));
+        root.setExpression(std::move(testNode));
+    }
 
-    std::cout << testNode->getValue() << std::endl;
+    root.doStatement();
 }
-

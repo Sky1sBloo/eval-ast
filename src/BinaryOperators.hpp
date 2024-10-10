@@ -9,6 +9,12 @@ enum class BinaryOperators
 	DIVISION
 };
 
+enum class BinaryDirection
+{
+    LEFT,
+    RIGHT
+};
+
 static std::unordered_map<BinaryOperators, int> operatorPrecedence = {
     { BinaryOperators::ADDITION, 1 },
     { BinaryOperators::SUBTRACTION, 1 },

@@ -128,14 +128,14 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
      * @tparam expression New Binary operation to be added
      * @param appendOnLeft Appends on either mValueA if true or mValueB if false
      */
-    void appendBinaryOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation)
+    void appendBinaryOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation, BinaryDirection childDir = BinaryDirection::RIGHT)
     {
         if (std::holds_alternative<std::unique_ptr<BinaryOperationNode<T>>>(mValueB) &&
             newBinaryOperation->getOperationPrecedence() >
                 std::get<std::unique_ptr<BinaryOperationNode<T>>>(mValueB)->getOperationPrecedence())
 
         {
-            auto &childPtr = std::get<std::unique_ptr<BinaryOperationNode<T>>>(mValueB);
+            auto &childPtr = std::get<std::unique_ptr<BinaryOperationNode<T>>>((childDir == BinaryDirection::RIGHT) ? mValueB : mValueA);
             if (!childPtr)
             {
                 throw std::runtime_error("Operation appending, valueB is null");
@@ -144,9 +144,9 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
             return;
         }
 
-        ExpressionNodeContainer<T> tempValue = std::move(mValueB);
+        ExpressionNodeContainer<T> tempValue = std::move((childDir == BinaryDirection::RIGHT) ? mValueB : mValueA);
         newBinaryOperation->setValueA(std::move(tempValue));
-        mValueB = std::move(newBinaryOperation);
+        (childDir == BinaryDirection::RIGHT) ? mValueB : mValueA = std::move(newBinaryOperation);
     }
 
   protected:
