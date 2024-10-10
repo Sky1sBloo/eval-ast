@@ -69,6 +69,9 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
     {
     }
 
+    /**
+     * Use this for appending new operation
+     */
     BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> valueA,
                         std::unique_ptr<ExpressionNode<T>> valueB)
         : mValueA(std::move(valueA)), mValueB(std::move(valueB)), mOperation(operation)
@@ -79,7 +82,17 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
      * Use this if you prefer to construct the operation types directly
      */
     BinaryOperationNode(BinaryOperators operation, T valueA, T valueB)
-        : mValueA(std::make_unique<ConstantNode<T>>(valueA)), mValueB(std::make_unique<ConstantNode<T>>(valueB)), mOperation(operation)
+        : mValueA(std::make_unique<ConstantNode<T>>(valueA)), mValueB(std::make_unique<ConstantNode<T>>(valueB)),
+          mOperation(operation)
+    {
+    }
+
+    /**
+     * Use this for appending new operation
+     */
+    BinaryOperationNode(BinaryOperators operation, T value)
+        : mValueA(std::make_unique<ExpressionNode<T>>(nullptr)), mValueB(std::make_unique<ConstantNode<T>>(value)),
+          mOperation(operation)
     {
     }
 
