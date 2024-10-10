@@ -75,6 +75,14 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
     {
     }
 
+    /**
+     * Use this if you prefer to construct the operation types directly
+     */
+    BinaryOperationNode(BinaryOperators operation, T valueA, T valueB)
+        : mValueA(std::make_unique<ConstantNode<T>>(valueA)), mValueB(std::make_unique<ConstantNode<T>>(valueB)), mOperation(operation)
+    {
+    }
+
     T getValue() const override
     {
         T value = std::visit(
