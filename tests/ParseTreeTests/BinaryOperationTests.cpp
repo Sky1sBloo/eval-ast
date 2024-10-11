@@ -119,10 +119,11 @@ TEST(ParseTreeTest, BinaryOperationAppending)
 
     while (!binaryOperationNodes.empty())
     {
-        root = std::move(BinaryOperationNode<float>::appendBinaryOperation(std::move(root),
-                                                                           std::move(binaryOperationNodes.front())));
+        root = BinaryOperationNode<float>::appendBinaryOperation(std::move(root),
+                                                                           std::move(binaryOperationNodes.front()));
         binaryOperationNodes.pop();
     }
 
     EXPECT_FLOAT_EQ(root->getValue(), 1.f + 2.f * 3.f - 4.f / 5.f);
 }
+
