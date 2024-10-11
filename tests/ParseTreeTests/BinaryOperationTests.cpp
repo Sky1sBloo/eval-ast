@@ -119,8 +119,7 @@ TEST(ParseTreeTest, BinaryOperationAppending)
 
     while (!binaryOperationNodes.empty())
     {
-        root = BinaryOperationNode<float>::appendBinaryOperation(std::move(root),
-                                                                           std::move(binaryOperationNodes.front()));
+        BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(binaryOperationNodes.front()));
         binaryOperationNodes.pop();
     }
 

@@ -146,22 +146,20 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
     /**
      * Use this for root operation and general append operation
      *
-     * @tparam root Root node of the binary operation
+     * @tparam root Root node of the binary operation, this will be modified
      * @tparam newBinaryOperation The operation to be appended
      *
-     * @return The new root node if the new operation has lower precedence
      */
-    static std::unique_ptr<BinaryOperationNode<T>> appendBinaryOperation(
-        std::unique_ptr<BinaryOperationNode<T>> root, std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation)
+    static void appendBinaryRootOperation(std::unique_ptr<BinaryOperationNode<T>> &root,
+                               std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation)
     {
         if (root->getOperationPrecedence() > newBinaryOperation->getOperationPrecedence())
         {
             newBinaryOperation->setValueA(std::move(root));
-            return std::move(newBinaryOperation);
+            root = std::move(newBinaryOperation);
         }
 
         root->appendBinaryOperation(std::move(newBinaryOperation));
-        return std::move(root);
     }
 
   protected:
