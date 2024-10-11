@@ -9,7 +9,6 @@
 ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseString(parseString)
 {
     std::string parseConstant;
-    int s = 0;
     for (char parseChar : parseString)
     {
         if (std::isdigit(parseChar) || parseChar == '.')
@@ -22,7 +21,6 @@ ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseStrin
             {
                 mConstantNodes.push(std::make_unique<ConstantNode<float>>(std::stof(parseConstant)));
                 parseConstant.clear();
-                s++;
             }
             mOperators.push(operatorCharacters.at(parseChar));
         }
@@ -34,15 +32,17 @@ ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseStrin
     }
 }
 
-void ParseTreeBuilder::generateParseTree()
+bool ParseTreeBuilder::generateParseTree()
 {
     if (mConstantNodes.size() < 2)
     {
         std::cerr << "Invalid ParseString: Constants too few" << std::endl;
+        return false;
     }
     if (mOperators.size() != mConstantNodes.size() - 1)
     {
         std::cerr << "Invalid ParseString: Operators too few/many" << std::endl;
+        return false;
     }
 
     // For retrieving the first 2 operations
@@ -64,6 +64,11 @@ void ParseTreeBuilder::generateParseTree()
         BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(newOperation)); 
     } 
 
-    PrintNode<float> printNode(std::move(root));
-    printNode.doStatement();
+    mRootStatement = std::make_unique<PrintNode<float>>(std::move(root));
+    return true;
+}
+
+void ParseTreeBuilder::runParseTree()
+{
+    mRootStatement->doStatement();
 }
