@@ -1,6 +1,10 @@
 #pragma once
 
+#include <memory>
 #include <string>
+#include <queue>
+
+#include "ParseTree.hpp"
 
 class ParseTreeBuilder
 {
@@ -10,4 +14,6 @@ class ParseTreeBuilder
 
   private:
     std::string mParseString;
+    std::queue<std::unique_ptr<ConstantNode<float>>> mConstantNodes;
+    std::queue<BinaryOperators> mOperators;
 };
