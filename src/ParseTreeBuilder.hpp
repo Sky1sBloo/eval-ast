@@ -14,9 +14,9 @@ class ParseTreeBuilder
     /**
      * Generates a new parse tree
      * 
-     * @return If parse tree creation failed
+     * Throws std::invalid_argument if parseString is invalid
     */
-    bool generateParseTree();
+    void generateParseTree();
     void runParseTree();
 
   private:

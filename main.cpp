@@ -1,6 +1,7 @@
 #include "ParseTreeBuilder.hpp"
 
 #include <iostream>
+#include <stdexcept>
 
 
 // TODO: Add argument handling
@@ -10,11 +11,15 @@ int main(int argc, char* argv[])
     {
         std::cerr << "Arguments too few" << "\n" <<
             "Usage: eval-ast [equation]" << std::endl;
+
+        return 1;
     }
 
-    ParseTreeBuilder parseTreeBuilder("1+23.5*2");
-    if (parseTreeBuilder.generateParseTree()) 
-    {
+    ParseTreeBuilder parseTreeBuilder(argv[1]);
+    try {
+        parseTreeBuilder.generateParseTree();
         parseTreeBuilder.runParseTree();
+    } catch (const std::invalid_argument& ex) {
+        std::cerr << ex.what() << std::endl;
     }
 }

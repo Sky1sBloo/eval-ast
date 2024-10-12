@@ -3,7 +3,7 @@
 #include "ParseTree.hpp"
 
 #include <cctype>
-#include <iostream>
+#include <stdexcept>
 #include <string>
 
 ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseString(parseString)
@@ -32,17 +32,15 @@ ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseStrin
     }
 }
 
-bool ParseTreeBuilder::generateParseTree()
+void ParseTreeBuilder::generateParseTree()
 {
     if (mConstantNodes.size() < 2)
     {
-        std::cerr << "Invalid ParseString: Constants too few" << std::endl;
-        return false;
+        throw std::invalid_argument("Invalid ParseString: Constants too few");
     }
     if (mOperators.size() != mConstantNodes.size() - 1)
     {
-        std::cerr << "Invalid ParseString: Operators too few/many" << std::endl;
-        return false;
+        throw std::invalid_argument("Invalid ParseStriing: Operators too many/few");
     }
 
     // For retrieving the first 2 operations
@@ -65,7 +63,6 @@ bool ParseTreeBuilder::generateParseTree()
     } 
 
     mRootStatement = std::make_unique<PrintNode<float>>(std::move(root));
-    return true;
 }
 
 void ParseTreeBuilder::runParseTree()
