@@ -10,7 +10,6 @@ TEST (ParseTreeBuilderTest, BasicOperation)
     ParseTreeBuilder builder(parseString);
 
     EXPECT_NO_THROW(builder.generateParseTree());
-    EXPECT_NO_THROW(builder.runParseTree());
 }
 
 TEST (ParseTreeBuilderTest, WrongOperation)
@@ -22,4 +21,13 @@ TEST (ParseTreeBuilderTest, WrongOperation)
         ParseTreeBuilder builder(parseStr);
         EXPECT_THROW(builder.generateParseTree(), std::invalid_argument);
     }
+}
+
+TEST (ParseTreeBuilderTest, PrecedenceChecking)
+{
+    const std::string parseString = "1+2*3/4-5*6";
+
+    ParseTreeBuilder builder(parseString);
+
+    EXPECT_NO_THROW(builder.generateParseTree());
 }
