@@ -15,11 +15,20 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    ParseTreeBuilder parseTreeBuilder(argv[1]);
+    std::string parseString;
+    for (int i = 1; i < argc; i++)
+    {
+        parseString.append(argv[i]);
+    }
+
+    ParseTreeBuilder parseTreeBuilder(parseString);
     try {
         parseTreeBuilder.generateParseTree();
         parseTreeBuilder.runParseTree();
     } catch (const std::invalid_argument& ex) {
         std::cerr << ex.what() << std::endl;
+        return 1;
     }
+
+    return 0;
 }
