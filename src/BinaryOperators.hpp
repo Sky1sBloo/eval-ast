@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <unordered_map>
 
 enum class BinaryOperators
@@ -21,3 +22,18 @@ static std::unordered_map<BinaryOperators, int> operatorPrecedence = {
     { BinaryOperators::MULTIPLICATION, 2 },
     { BinaryOperators::DIVISION, 2 },
 };
+
+static std::unordered_map<char, BinaryOperators> operatorCharacters = {
+    { '+', BinaryOperators::ADDITION },
+    { '-', BinaryOperators::SUBTRACTION },
+    { '*', BinaryOperators::MULTIPLICATION },
+    { '/', BinaryOperators::DIVISION }
+};
+
+/**
+ * Checks if the character is an operator
+*/
+inline bool isCharBinaryOperator(char ch)
+{
+    return operatorCharacters.find(ch) != operatorCharacters.end();
+}

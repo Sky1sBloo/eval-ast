@@ -1,8 +1,11 @@
 #include "ParseTreeBuilder.hpp"
 
-int main()
+// TODO: Add argument handling
+int main(int argc, char* argv[])
 {
-    std::string operation("1+11");
-    ParseTreeBuilder parseTreeBuilder(operation);
-    parseTreeBuilder.generateParseTree();
+    ParseTreeBuilder parseTreeBuilder("1+23.5*2");
+    if (parseTreeBuilder.generateParseTree()) 
+    {
+        parseTreeBuilder.runParseTree();
+    }
 }
