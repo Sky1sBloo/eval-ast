@@ -140,7 +140,7 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
 
     int getOperationPrecedence() const
     {
-        return operatorPrecedence.at(mOperation);
+        return getOperationPrecedence(mOperation);
     }
 
     /**
