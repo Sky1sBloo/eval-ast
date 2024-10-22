@@ -143,16 +143,20 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
         return operatorPrecedence.at(mOperation);
     }
 
-     /**
+    /**
      * Appends a new binary operation on mValueA or B depending on childDIr
      *
      * @tparam T holder type generally for the ConstantNode
+     * @tparam root Root node of the binary operation
      * @tparam newBinaryOperation New Binary operation to be added
      * @param childDir Specifies the direction where newBinaryOperation will be appended
      */
-    void appendBinaryRootOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation, BinaryDirection childDir = BinaryDirection::RIGHT)
+    static void appendBinaryRootOperation(std::unique_ptr<BinaryOperationNode<T>> &root,
+                                   std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation,
+                                   BinaryDirection childDir = BinaryDirection::RIGHT)
     {
-        ExpressionNodeContainer<T> &selectedValue = (childDir == BinaryDirection::RIGHT) ? mValueB : mValueA;
+        ExpressionNodeContainer<T> &selectedValue = (childDir == BinaryDirection::RIGHT) ? root->mValueB : root->mValueA;
+
         ExpressionNodeContainer<T> tempValue = std::move(selectedValue);
         newBinaryOperation->setValueA(std::move(tempValue));
         selectedValue = std::move(newBinaryOperation);
