@@ -3,10 +3,10 @@
 #include <string>
 #include <queue>
 #include <variant>
-#include "ParseTree.hpp"
+#include "BinaryOperators.hpp"
 
 template<typename T>
-using PostFixContainer = std::variant<std::unique_ptr<ConstantNode<T>>, BinaryOperators>;
+using PostFixContainer = std::variant<T, BinaryOperators>;
 
 /**
  * Class representing an equation

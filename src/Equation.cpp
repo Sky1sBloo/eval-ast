@@ -3,7 +3,6 @@
 #include "BinaryOperators.hpp"
 #include "ParseTree.hpp"
 #include <cctype>
-#include <memory>
 #include <stack>
 
 template<typename T>
@@ -20,7 +19,7 @@ Equation<T>::Equation(const std::string &infixEquation)
         }
         else if (isCharBinaryOperator(parseChar))
         {
-            postFixEquation.emplace(std::make_unique<ConstantNode<T>>(std::stof(parseConstant)));
+            postFixEquation.emplace(std::stof(parseConstant));
             parseConstant.clear();
             BinaryOperators current = getOperatorFromChar(parseChar);
 
@@ -32,7 +31,7 @@ Equation<T>::Equation(const std::string &infixEquation)
             {
                 while (operators.top() != BinaryOperators::OPEN_PARENTHESIS)
                 {
-                    postFixEquation.push(std::move(operators.top()));
+                    postFixEquation.push(operators.top());
                     operators.pop();
                 }
                 operators.pop();
