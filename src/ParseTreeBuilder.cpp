@@ -37,9 +37,9 @@ void ParseTreeBuilder::generateParseTree()
     }
 
     // To retrieve the first 2 values
-    float valueA = mConstants.top();
+    float valueA = mConstants.front();
     mConstants.pop();
-    float valueB = mConstants.top();
+    float valueB = mConstants.front();
     mConstants.pop();
 
     auto root =
@@ -50,12 +50,9 @@ void ParseTreeBuilder::generateParseTree()
     // To append remaining values
     while (!mOperators.empty())
     {
-        auto newOperation = std::make_unique<BinaryOperationNode<float>>(mOperators.front(), std::move(root), std::make_unique<ConstantNode<float>>(mConstants.top()));
+        auto newOperation = std::make_unique<BinaryOperationNode<float>>(mOperators.front(), std::move(root), std::make_unique<ConstantNode<float>>(mConstants.front()));
         root = std::move(newOperation);
         mConstants.pop();
-        
-
-        //BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(newOperation));
         mOperators.pop();
     }
 

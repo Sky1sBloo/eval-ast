@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <stack>
 #include <queue>
 
 #include "Equation.hpp"
@@ -21,7 +20,7 @@ class ParseTreeBuilder
     void runParseTree();
 
   private:
-    std::stack<float> mConstants;
+    std::queue<float> mConstants;
     std::queue<BinaryOperators> mOperators;
 
     std::unique_ptr<StatementNode> mRootStatement;
