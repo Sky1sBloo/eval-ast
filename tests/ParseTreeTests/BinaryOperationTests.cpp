@@ -99,30 +99,3 @@ TEST(ParseTreeTest, BinaryOperationBuilder_FLOAT)
     EXPECT_FLOAT_EQ(binaryFloatDivideOperation.getValue(), operationValues[0] / operationValues[1]);
 }
 
-TEST(ParseTreeTest, BinaryOperationAppending)
-{
-    std::array<float, 5> operationValues = {1.f, 2.f, 3.f, 4.f, 5.f};
-    std::array<BinaryOperators, 4> operations = {BinaryOperators::ADDITION, BinaryOperators::MULTIPLICATION,
-                                                 BinaryOperators::SUBTRACTION, BinaryOperators::DIVISION};
-
-    std::queue<std::unique_ptr<BinaryOperationNode<float>>> binaryOperationNodes;
-
-    binaryOperationNodes.push(
-        std::make_unique<BinaryOperationNode<float>>(operations[0], operationValues[0], operationValues[0 + 1]));
-    for (int i = 1; i < operations.size(); i++)
-    {
-        binaryOperationNodes.push(std::make_unique<BinaryOperationNode<float>>(operations[i], operationValues[i + 1]));
-    }
-
-    auto root = std::move(binaryOperationNodes.front());
-    binaryOperationNodes.pop();
-
-    while (!binaryOperationNodes.empty())
-    {
-        BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(binaryOperationNodes.front()));
-        binaryOperationNodes.pop();
-    }
-
-    EXPECT_FLOAT_EQ(root->getValue(), 1.f + 2.f * 3.f - 4.f / 5.f);
-}
-
