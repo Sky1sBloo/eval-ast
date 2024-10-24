@@ -54,6 +54,7 @@ void ParseTreeBuilder::generateParseTree()
         mConstants.pop();
 
         BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(newOperation));
+        mOperators.pop();
     }
 
     mRootStatement = std::make_unique<PrintNode<float>>(std::move(root));
