@@ -21,7 +21,7 @@ class ParseTreeBuilder
     void runParseTree();
 
   private:
-    std::stack<std::unique_ptr<ConstantNode<float>>> mConstantNodes;
+    std::stack<float> mConstants;
     std::queue<BinaryOperators> mOperators;
 
     std::unique_ptr<StatementNode> mRootStatement;
