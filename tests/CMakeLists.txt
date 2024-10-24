@@ -3,7 +3,6 @@ add_executable(
     ParseTreeTests/ConstantNodeTests.cpp
     ParseTreeTests/BinaryOperationTests.cpp
     EquationTests.cpp
-    ParseTreeBuilder.cpp
 )
 
 target_link_libraries(
