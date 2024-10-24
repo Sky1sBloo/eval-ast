@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <stack>
+#include <queue>
 
 #include "Equation.hpp"
 #include "ParseTree.hpp"
@@ -21,7 +22,7 @@ class ParseTreeBuilder
 
   private:
     std::stack<std::unique_ptr<ConstantNode<float>>> mConstantNodes;
-    std::stack<BinaryOperators> mOperators;
+    std::queue<BinaryOperators> mOperators;
 
     std::unique_ptr<StatementNode> mRootStatement;
 };
