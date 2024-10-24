@@ -25,31 +25,35 @@ void ParseTreeBuilder::generateParseTree()
         PostFixContainer<float> node = std::move(mEquation.postFixEquation.front());
         mEquation.postFixEquation.pop();
 
-        std::visit(visitor{[&constants](float constantValue) { constants.push(constantValue); },
-                           [&constants, &root](BinaryOperators op) {
-                               if (root == nullptr)
-                               {
-                                   if (constants.size() < 2)
-                                   {
-                                       throw std::invalid_argument("Invalid ParseString: Constants too few");
-                                   }
+        if (std::holds_alternative<float>(node))
+        {
+            constants.push(std::get<float>(node));
+        }
+        else if (std::holds_alternative<BinaryOperators>(node))
+        {
+            BinaryOperators op = std::get<BinaryOperators>(node);
+            if (root == nullptr)
+            {
+                if (constants.size() < 2)
+                {
+                    throw std::invalid_argument("Invalid ParseString: Constants too few");
+                }
 
-                                   float valueA = constants.top();
-                                   constants.pop();
-                                   float valueB = constants.top();
-                                   constants.pop();
+                float valueA = constants.top();
+                constants.pop();
+                float valueB = constants.top();
+                constants.pop();
 
-                                   root = std::make_unique<BinaryOperationNode<float>>(op, valueA, valueB);
-                               }
-                               else
-                               {
-                                   auto newOperation = std::make_unique<BinaryOperationNode<float>>(
-                                       op, std::move(root), std::make_unique<ConstantNode<float>>(constants.top()));
-                                   constants.pop();
-                                   root = std::move(newOperation);
-                               }
-                           }},
-                   node);
+                root = std::make_unique<BinaryOperationNode<float>>(op, valueA, valueB);
+            }
+            else
+            {
+                auto newOperation = std::make_unique<BinaryOperationNode<float>>(
+                    op, std::move(root), std::make_unique<ConstantNode<float>>(constants.top()));
+                constants.pop();
+                root = std::move(newOperation);
+            }
+        }
     }
 
     mRootStatement = std::make_unique<PrintNode<float>>(std::move(root));

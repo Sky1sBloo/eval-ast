@@ -4,8 +4,7 @@
 #include <cctype>
 #include <stack>
 
-template<typename T>
-Equation<T>::Equation(const std::string &infixEquation)
+template <typename T> Equation<T>::Equation(const std::string &infixEquation)
 {
     std::stack<BinaryOperators> operators;
     std::string parseConstant;
@@ -18,23 +17,12 @@ Equation<T>::Equation(const std::string &infixEquation)
         }
         else if (isCharBinaryOperator(parseChar))
         {
-            postFixEquation.emplace(std::stof(parseConstant));
+            if (!parseConstant.empty())
+            {
+                postFixEquation.emplace(std::stof(parseConstant));
+            }
             parseConstant.clear();
             BinaryOperators current = getOperatorFromChar(parseChar);
-
-            if (current == BinaryOperators::OPEN_PARENTHESIS)
-            {
-                operators.push(current);
-            }
-            else if (current == BinaryOperators::CLOSE_PARENTHESIS)
-            {
-                while (operators.top() != BinaryOperators::OPEN_PARENTHESIS)
-                {
-                    postFixEquation.push(operators.top());
-                    operators.pop();
-                }
-                operators.pop();
-            }
 
             if (operators.empty() || getOperatorPrecedence(current) > getOperatorPrecedence(operators.top()) ||
                 operators.top() == BinaryOperators::OPEN_PARENTHESIS)
@@ -50,6 +38,20 @@ Equation<T>::Equation(const std::string &infixEquation)
                 }
                 operators.push(current);
             }
+        }
+        else if (getOperatorFromChar(parseChar) == BinaryOperators::OPEN_PARENTHESIS)
+        {
+            operators.push(BinaryOperators::OPEN_PARENTHESIS);
+        }
+        else if (getOperatorFromChar(parseChar) == BinaryOperators::CLOSE_PARENTHESIS)
+        {
+            postFixEquation.emplace(std::stof(parseConstant));
+            while (operators.top() != BinaryOperators::OPEN_PARENTHESIS)
+            {
+                postFixEquation.push(operators.top());
+                operators.pop();
+            }
+            operators.pop();
         }
     }
 

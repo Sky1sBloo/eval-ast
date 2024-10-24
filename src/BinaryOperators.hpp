@@ -28,9 +28,11 @@ static const std::unordered_map<char, BinaryOperators> operatorCharacters = {
 
 /**
  * Checks if the character is an operator
+ * Doesn't include parenthesis
  */
 inline bool isCharBinaryOperator(char ch)
 {
+    if (ch == '(' || ch == ')')  return false;
     return operatorCharacters.find(ch) != operatorCharacters.end();
 }
 
