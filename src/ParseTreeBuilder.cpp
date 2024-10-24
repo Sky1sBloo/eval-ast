@@ -19,9 +19,11 @@ ParseTreeBuilder::ParseTreeBuilder(const Equation<float> &equation)
         PostFixContainer<float> node = std::move(equationCopy.postFixEquation.front());
         equationCopy.postFixEquation.pop();
 
-        std::visit(visitor{
-            [this](std::unique_ptr<ConstantNode<float>> &constNode) { mConstantNodes.push(std::move(constNode)); },
-            [this](BinaryOperators op) { mOperators.push(op); }}, node);
+        std::visit(visitor{[this](std::unique_ptr<ConstantNode<float>> &constNode) {
+                               mConstantNodes.push(std::move(constNode));
+                           },
+                           [this](BinaryOperators op) { mOperators.push(op); }},
+                   node);
     }
 }
 
@@ -35,6 +37,7 @@ void ParseTreeBuilder::generateParseTree()
     {
         throw std::invalid_argument("Invalid ParseStriing: Operators too many/few");
     }
+
 
     /*
 
