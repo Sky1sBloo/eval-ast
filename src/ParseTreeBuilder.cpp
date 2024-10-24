@@ -50,10 +50,12 @@ void ParseTreeBuilder::generateParseTree()
     // To append remaining values
     while (!mOperators.empty())
     {
-        auto newOperation = std::make_unique<BinaryOperationNode<float>>(mOperators.front(), std::make_unique<ConstantNode<float>>(mConstants.top()));
+        auto newOperation = std::make_unique<BinaryOperationNode<float>>(mOperators.front(), std::move(root), std::make_unique<ConstantNode<float>>(mConstants.top()));
+        root = std::move(newOperation);
         mConstants.pop();
+        
 
-        BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(newOperation));
+        //BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(newOperation));
         mOperators.pop();
     }
 
