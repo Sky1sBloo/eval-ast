@@ -2,6 +2,7 @@ add_executable(
     eval-ast-unit-tests
     ParseTreeTests/ConstantNodeTests.cpp
     ParseTreeTests/BinaryOperationTests.cpp
+    EquationTests.cpp
     ParseTreeBuilder.cpp
 )
 
