@@ -10,17 +10,6 @@
 
 ParseTreeBuilder::ParseTreeBuilder(const Equation<float> &equation) : mEquation(equation)
 {
-    /*
-    Equation<float> equationCopy = equation;
-    while (!equationCopy.postFixEquation.empty())
-    {
-        PostFixContainer<float> node = std::move(equationCopy.postFixEquation.front());
-        equationCopy.postFixEquation.pop();
-
-        std::visit(visitor{[this](float constantValue) { mConstants.push(constantValue); },
-                           [this](BinaryOperators op) { mOperators.push(op); }},
-                   node);
-    } */
 }
 
 template <typename... callable> struct visitor : callable...
