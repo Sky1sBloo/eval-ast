@@ -36,7 +36,7 @@ Equation<T>::Equation(const std::string &infixEquation)
                 operators.pop();
             }
 
-            if (!operators.empty() && getOperatorPrecedence(current) > getOperatorPrecedence(operators.top()) ||
+            if (operators.empty() || getOperatorPrecedence(current) > getOperatorPrecedence(operators.top()) ||
                 operators.top() == BinaryOperators::OPEN_PARENTHESIS)
             {
                 operators.push(current);
@@ -45,11 +45,18 @@ Equation<T>::Equation(const std::string &infixEquation)
             {
                 while (!operators.empty() && getOperatorPrecedence(operators.top()) >= getOperatorPrecedence(current))
                 {
-                    postFixEquation.emplace(operators.top());
+                    postFixEquation.push(operators.top());
                     operators.pop();
                 }
             }
         }
+    }
+
+    postFixEquation.emplace(std::stof(parseConstant));
+    while (!operators.empty())
+    {
+        postFixEquation.push(operators.top());
+        operators.pop();
     }
 }
 

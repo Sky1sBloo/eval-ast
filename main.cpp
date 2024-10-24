@@ -23,7 +23,6 @@ int main(int argc, char* argv[])
     }
     Equation<float> eq(parseString);
 
-    /*
 
     ParseTreeBuilder parseTreeBuilder(parseString);
     try {
@@ -32,7 +31,7 @@ int main(int argc, char* argv[])
     } catch (const std::invalid_argument& ex) {
         std::cerr << ex.what() << std::endl;
         return 1;
-    }  */
+    }  
 
     return 0;
 }
