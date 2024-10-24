@@ -1,34 +1,27 @@
 #include "ParseTreeBuilder.hpp"
 #include "BinaryOperators.hpp"
+#include "Equation.hpp"
 #include "ParseTree.hpp"
 
 #include <cctype>
 #include <stdexcept>
-#include <string>
+#include <variant>
 
-ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseString(parseString)
+template <typename... callable> struct visitor : callable...
 {
-    std::string parseConstant;
-    for (char parseChar : parseString)
+    using callable::operator()...;
+};
+ParseTreeBuilder::ParseTreeBuilder(const Equation<float> &equation)
+{
+    Equation<float> equationCopy = equation;
+    while (!equationCopy.postFixEquation.empty())
     {
-        if (std::isdigit(parseChar) || parseChar == '.')
-        {
-            parseConstant.push_back(parseChar);
-        }
-        else if (isCharBinaryOperator(parseChar))
-        {
-            if (!parseConstant.empty())
-            {
-                mConstantNodes.push(std::make_unique<ConstantNode<float>>(std::stof(parseConstant)));
-                parseConstant.clear();
-            }
-            mOperators.push(operatorCharacters.at(parseChar));
-        }
-    }
+        PostFixContainer<float> node = std::move(equationCopy.postFixEquation.front());
+        equationCopy.postFixEquation.pop();
 
-    if (!parseConstant.empty())
-    {
-        mConstantNodes.push(std::make_unique<ConstantNode<float>>(std::stof(parseConstant)));
+        std::visit(visitor{
+            [this](std::unique_ptr<ConstantNode<float>> &constNode) { mConstantNodes.push(std::move(constNode)); },
+            [this](BinaryOperators op) { mOperators.push(op); }}, node);
     }
 }
 
@@ -43,6 +36,8 @@ void ParseTreeBuilder::generateParseTree()
         throw std::invalid_argument("Invalid ParseStriing: Operators too many/few");
     }
 
+    /*
+
     // For retrieving the first 2 operations
     std::unique_ptr<ConstantNode<float>> valueA = std::move(mConstantNodes.front());
     mConstantNodes.pop();
@@ -55,13 +50,12 @@ void ParseTreeBuilder::generateParseTree()
     // For appending
     while (!mOperators.empty())
     {
-        auto newOperation = std::make_unique<BinaryOperationNode<float>>(mOperators.front(), std::move(mConstantNodes.front()));
-        mConstantNodes.pop();
-        mOperators.pop();
+        auto newOperation = std::make_unique<BinaryOperationNode<float>>(mOperators.front(),
+    std::move(mConstantNodes.front())); mConstantNodes.pop(); mOperators.pop();
         BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(newOperation));
-    } 
+    }
 
-    mRootStatement = std::make_unique<PrintNode<float>>(std::move(root));
+    mRootStatement = std::make_unique<PrintNode<float>>(std::move(root)); */
 }
 
 void ParseTreeBuilder::runParseTree()
