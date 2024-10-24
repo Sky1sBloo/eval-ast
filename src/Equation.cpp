@@ -48,6 +48,7 @@ Equation<T>::Equation(const std::string &infixEquation)
                     postFixEquation.push(operators.top());
                     operators.pop();
                 }
+                operators.push(current);
             }
         }
     }
