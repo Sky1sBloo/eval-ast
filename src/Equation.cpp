@@ -36,7 +36,7 @@ Equation<T>::Equation(const std::string &infixEquation)
                 operators.pop();
             }
 
-            if (operators.empty() && getOperatorPrecedence(current) > getOperatorPrecedence(operators.top()) ||
+            if (!operators.empty() && getOperatorPrecedence(current) > getOperatorPrecedence(operators.top()) ||
                 operators.top() == BinaryOperators::OPEN_PARENTHESIS)
             {
                 operators.push(current);
