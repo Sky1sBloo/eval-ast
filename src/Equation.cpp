@@ -1,14 +1,13 @@
 #include "Equation.hpp"
 
 #include "BinaryOperators.hpp"
-#include "ParseTree.hpp"
 #include <cctype>
 #include <stack>
 
 template<typename T>
 Equation<T>::Equation(const std::string &infixEquation)
 {
-    std::stack<ExpressionNodeContainer<T>> operators;
+    std::stack<BinaryOperators> operators;
     std::string parseConstant;
 
     for (char parseChar : infixEquation)
@@ -53,3 +52,5 @@ Equation<T>::Equation(const std::string &infixEquation)
         }
     }
 }
+
+template class Equation<float>;
