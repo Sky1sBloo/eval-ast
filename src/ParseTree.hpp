@@ -116,6 +116,8 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
                     return valueA->getValue() * valueB->getValue();
                 case BinaryOperators::DIVISION:
                     return valueA->getValue() / valueB->getValue();
+                default:
+                    throw std::runtime_error("Binary Operator mOperation uses invalid operation");
                 }
                 throw std::runtime_error("Invalid binary operation: Invalid operation");
             },
