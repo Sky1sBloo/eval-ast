@@ -31,6 +31,7 @@ class StatementNode
 template <typename T> class ExpressionNode
 {
   public:
+    virtual ~ExpressionNode() = default;
     virtual T getValue() const = 0;
 };
 
