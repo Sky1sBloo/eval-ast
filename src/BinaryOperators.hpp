@@ -1,6 +1,13 @@
 #pragma once
+#include <string_view>
 #include <unordered_map>
 
+class EquationOperators
+{
+public:
+private:
+
+};
 enum class BinaryOperators
 {
     ADDITION,
