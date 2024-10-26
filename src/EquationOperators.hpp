@@ -22,9 +22,9 @@ class EquationOperators
         char symbol;
     };
 
-    constexpr bool ischarBinaryOperator(char ch) const;
-    constexpr int getOperatorPrecedence(Types type) const;
-    Types getOperatorFromChar(char ch) const;
+    static constexpr bool ischarBinaryOperator(char ch);
+    static constexpr int getOperatorPrecedence(Types type);
+    static constexpr Types getOperatorFromChar(char ch);
 
   private:
     static constexpr std::array<TypeParameters, 6> operatorParameters = {{{Types::ADDITION, 2, '+'},

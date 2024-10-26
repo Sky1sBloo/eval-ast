@@ -1,6 +1,6 @@
 #include "EquationOperators.hpp"
 
-constexpr bool EquationOperators::ischarBinaryOperator(char ch) const
+constexpr bool EquationOperators::ischarBinaryOperator(char ch) 
 {
     if (ch == '(' || ch == ')')
         return false;
@@ -14,4 +14,10 @@ constexpr bool EquationOperators::ischarBinaryOperator(char ch) const
     }
 
     return false;
+}
+
+
+constexpr int EquationOperators::getOperatorPrecedence(Types type) 
+{
+    
 }
