@@ -1,4 +1,5 @@
 #include "ParseTreeBuilder.hpp"
+#include "Equation.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -20,6 +21,8 @@ int main(int argc, char* argv[])
     {
         parseString.append(argv[i]);
     }
+    Equation<float> eq(parseString);
+
 
     ParseTreeBuilder parseTreeBuilder(parseString);
     try {
@@ -28,7 +31,7 @@ int main(int argc, char* argv[])
     } catch (const std::invalid_argument& ex) {
         std::cerr << ex.what() << std::endl;
         return 1;
-    }
+    }  
 
     return 0;
 }

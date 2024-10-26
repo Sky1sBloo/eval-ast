@@ -1,66 +1,60 @@
 #include "ParseTreeBuilder.hpp"
 #include "BinaryOperators.hpp"
+#include "Equation.hpp"
 #include "ParseTree.hpp"
 
 #include <cctype>
+#include <stack>
 #include <stdexcept>
-#include <string>
+#include <variant>
 
-ParseTreeBuilder::ParseTreeBuilder(const std::string &parseString) : mParseString(parseString)
+ParseTreeBuilder::ParseTreeBuilder(const Equation<float> &equation) : mEquation(equation)
 {
-    std::string parseConstant;
-    for (char parseChar : parseString)
-    {
-        if (std::isdigit(parseChar) || parseChar == '.')
-        {
-            parseConstant.push_back(parseChar);
-        }
-        else if (isCharBinaryOperator(parseChar))
-        {
-            if (!parseConstant.empty())
-            {
-                mConstantNodes.push(std::make_unique<ConstantNode<float>>(std::stof(parseConstant)));
-                parseConstant.clear();
-            }
-            mOperators.push(operatorCharacters.at(parseChar));
-        }
-    }
-
-    if (!parseConstant.empty())
-    {
-        mConstantNodes.push(std::make_unique<ConstantNode<float>>(std::stof(parseConstant)));
-    }
 }
 
+template <typename... callable> struct visitor : callable...
+{
+    using callable::operator()...;
+};
 void ParseTreeBuilder::generateParseTree()
 {
-    if (mConstantNodes.size() < 2)
+    std::stack<float> constants;
+    std::unique_ptr<BinaryOperationNode<float>> root;
+    while (!mEquation.postFixEquation.empty())
     {
-        throw std::invalid_argument("Invalid ParseString: Constants too few");
+        PostFixContainer<float> node = std::move(mEquation.postFixEquation.front());
+        mEquation.postFixEquation.pop();
+
+        if (std::holds_alternative<float>(node))
+        {
+            constants.push(std::get<float>(node));
+        }
+        else if (std::holds_alternative<BinaryOperators>(node))
+        {
+            BinaryOperators op = std::get<BinaryOperators>(node);
+            if (root == nullptr)
+            {
+                if (constants.size() < 2)
+                {
+                    throw std::invalid_argument("Invalid ParseString: Constants too few");
+                }
+
+                float valueA = constants.top();
+                constants.pop();
+                float valueB = constants.top();
+                constants.pop();
+
+                root = std::make_unique<BinaryOperationNode<float>>(op, valueA, valueB);
+            }
+            else
+            {
+                auto newOperation = std::make_unique<BinaryOperationNode<float>>(
+                    op, std::move(root), std::make_unique<ConstantNode<float>>(constants.top()));
+                constants.pop();
+                root = std::move(newOperation);
+            }
+        }
     }
-    if (mOperators.size() != mConstantNodes.size() - 1)
-    {
-        throw std::invalid_argument("Invalid ParseStriing: Operators too many/few");
-    }
-
-    // For retrieving the first 2 operations
-    std::unique_ptr<ConstantNode<float>> valueA = std::move(mConstantNodes.front());
-    mConstantNodes.pop();
-    std::unique_ptr<ConstantNode<float>> valueB = std::move(mConstantNodes.front());
-    mConstantNodes.pop();
-
-    auto root = std::make_unique<BinaryOperationNode<float>>(mOperators.front(), std::move(valueA), std::move(valueB));
-    mOperators.pop();
-
-    // For appending
-    while (!mOperators.empty())
-    {
-        auto newOperation = std::make_unique<BinaryOperationNode<float>>(mOperators.front(), std::move(mConstantNodes.front()));
-        mConstantNodes.pop();
-        mOperators.pop();
-
-        BinaryOperationNode<float>::appendBinaryRootOperation(root, std::move(newOperation)); 
-    } 
 
     mRootStatement = std::make_unique<PrintNode<float>>(std::move(root));
 }

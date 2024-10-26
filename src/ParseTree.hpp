@@ -31,6 +31,7 @@ class StatementNode
 template <typename T> class ExpressionNode
 {
   public:
+    virtual ~ExpressionNode() = default;
     virtual T getValue() const = 0;
 };
 
@@ -115,6 +116,8 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
                     return valueA->getValue() * valueB->getValue();
                 case BinaryOperators::DIVISION:
                     return valueA->getValue() / valueB->getValue();
+                default:
+                    throw std::runtime_error("Binary Operator mOperation uses invalid operation");
                 }
                 throw std::runtime_error("Invalid binary operation: Invalid operation");
             },
@@ -140,63 +143,13 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
 
     int getOperationPrecedence() const
     {
-        return operatorPrecedence.at(mOperation);
-    }
-
-    /**
-     * Use this for root operation and general append operation
-     *
-     * @tparam root Root node of the binary operation, this will be modified
-     * @tparam newBinaryOperation The operation to be appended
-     *
-     */
-    static void appendBinaryRootOperation(std::unique_ptr<BinaryOperationNode<T>> &root,
-                               std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation)
-    {
-        if (root->getOperationPrecedence() > newBinaryOperation->getOperationPrecedence())
-        {
-            newBinaryOperation->setValueA(std::move(root));
-            root = std::move(newBinaryOperation);
-        }
-
-        root->appendBinaryOperation(std::move(newBinaryOperation));
+        return getOperationPrecedence(mOperation);
     }
 
   protected:
     ExpressionNodeContainer<T> mValueA;
     ExpressionNodeContainer<T> mValueB;
     const BinaryOperators mOperation;
-
-    /**
-     * Appends a new binary operation on mValueA or B depending on childDIr
-     *
-     * @tparam T holder type generally for the ConstantNode
-     * @tparam newBinaryOperation New Binary operation to be added
-     * @param childDir Specifies the direction where newBinaryOperation will be appended
-     */
-    void appendBinaryOperation(std::unique_ptr<BinaryOperationNode<T>> newBinaryOperation,
-                               BinaryDirection childDir = BinaryDirection::RIGHT)
-    {
-        ExpressionNodeContainer<T> &selectedValue = (childDir == BinaryDirection::RIGHT) ? mValueB : mValueA;
-
-        if (std::holds_alternative<std::unique_ptr<BinaryOperationNode<T>>>(mValueB) &&
-            newBinaryOperation->getOperationPrecedence() >
-                std::get<std::unique_ptr<BinaryOperationNode<T>>>(mValueB)->getOperationPrecedence())
-
-        {
-            auto &childPtr = std::get<std::unique_ptr<BinaryOperationNode<T>>>(selectedValue);
-            if (!childPtr)
-            {
-                throw std::runtime_error("Operation appending, valueB is null");
-            }
-            childPtr->appendBinaryOperation(std::move(newBinaryOperation));
-            return;
-        }
-
-        ExpressionNodeContainer<T> tempValue = std::move(selectedValue);
-        newBinaryOperation->setValueA(std::move(tempValue));
-        selectedValue = std::move(newBinaryOperation);
-    }
 };
 
 template <typename T> class PrintNode : public StatementNode
