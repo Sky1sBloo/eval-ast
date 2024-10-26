@@ -13,7 +13,7 @@ TEST (EQUATION_TEST, BINARY_OPERATION)
     std::queue<PostFixContainer<float>> expectedAnswer;
     expectedAnswer.push(2.f);
     expectedAnswer.push(3.f);
-    expectedAnswer.push(BinaryOperators::ADDITION);
+    expectedAnswer.push(EquationOperators::Types::ADDITION);
     
     Equation<float> testEq(constantValues);
 
@@ -29,7 +29,7 @@ TEST (EQUATION_TEST, BINARY_OPERATION)
             {
                 EXPECT_FLOAT_EQ(postFixValue, expectedValue);
             },
-            [](BinaryOperators postFixOp, BinaryOperators expectedOp)
+            [](EquationOperators::Types postFixOp, EquationOperators::Types expectedOp)
             {
                 EXPECT_EQ(postFixOp, expectedOp);
             },

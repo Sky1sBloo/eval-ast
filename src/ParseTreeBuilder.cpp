@@ -1,5 +1,5 @@
 #include "ParseTreeBuilder.hpp"
-#include "BinaryOperators.hpp"
+#include "EquationOperators.hpp"
 #include "Equation.hpp"
 #include "ParseTree.hpp"
 
@@ -29,9 +29,9 @@ void ParseTreeBuilder::generateParseTree()
         {
             constants.push(std::get<float>(node));
         }
-        else if (std::holds_alternative<BinaryOperators>(node))
+        else if (std::holds_alternative<EquationOperators::Types>(node))
         {
-            BinaryOperators op = std::get<BinaryOperators>(node);
+            EquationOperators::Types op = std::get<EquationOperators::Types>(node);
             if (root == nullptr)
             {
                 if (constants.size() < 2)

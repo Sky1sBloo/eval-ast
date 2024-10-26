@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <array>
 
-#include "BinaryOperators.hpp"
+#include "EquationOperators.hpp"
 #include "ParseTree.hpp"
 
 
@@ -10,16 +10,16 @@ TEST(ParseTreeTest, BinaryOperationConstructor_Integer)
 {
     std::array<int, 2> operationValues = {1, 2};
 
-    BinaryOperationNode<int> binaryIntAddOperation(BinaryOperators::ADDITION,
+    BinaryOperationNode<int> binaryIntAddOperation(EquationOperators::Types::ADDITION,
                                                    std::make_unique<ConstantNode<int>>(operationValues[0]),
                                                    std::make_unique<ConstantNode<int>>(operationValues[1]));
-    BinaryOperationNode<int> binaryIntSubtractOperation(BinaryOperators::SUBTRACTION,
+    BinaryOperationNode<int> binaryIntSubtractOperation(EquationOperators::Types::SUBTRACTION,
                                                         std::make_unique<ConstantNode<int>>(operationValues[0]),
                                                         std::make_unique<ConstantNode<int>>(operationValues[1]));
-    BinaryOperationNode<int> binaryIntMultiplyOperation(BinaryOperators::MULTIPLICATION,
+    BinaryOperationNode<int> binaryIntMultiplyOperation(EquationOperators::Types::MULTIPLICATION,
                                                         std::make_unique<ConstantNode<int>>(operationValues[0]),
                                                         std::make_unique<ConstantNode<int>>(operationValues[1]));
-    BinaryOperationNode<int> binaryIntDivideOperation(BinaryOperators::DIVISION,
+    BinaryOperationNode<int> binaryIntDivideOperation(EquationOperators::Types::DIVISION,
                                                       std::make_unique<ConstantNode<int>>(operationValues[0]),
                                                       std::make_unique<ConstantNode<int>>(operationValues[1]));
 
@@ -33,16 +33,16 @@ TEST(ParseTreeTest, BinaryOperationConstructor_Float)
 {
     std::array<float, 2> operationValues = {1.f, 2.f};
 
-    BinaryOperationNode<float> binaryFloatAddOperation(BinaryOperators::ADDITION,
+    BinaryOperationNode<float> binaryFloatAddOperation(EquationOperators::Types::ADDITION,
                                                        std::make_unique<ConstantNode<float>>(operationValues[0]),
                                                        std::make_unique<ConstantNode<float>>(operationValues[1]));
-    BinaryOperationNode<float> binaryFloatSubtractOperation(BinaryOperators::SUBTRACTION,
+    BinaryOperationNode<float> binaryFloatSubtractOperation(EquationOperators::Types::SUBTRACTION,
                                                             std::make_unique<ConstantNode<float>>(operationValues[0]),
                                                             std::make_unique<ConstantNode<float>>(operationValues[1]));
-    BinaryOperationNode<float> binaryFloatMultiplyOperation(BinaryOperators::MULTIPLICATION,
+    BinaryOperationNode<float> binaryFloatMultiplyOperation(EquationOperators::Types::MULTIPLICATION,
                                                             std::make_unique<ConstantNode<float>>(operationValues[0]),
                                                             std::make_unique<ConstantNode<float>>(operationValues[1]));
-    BinaryOperationNode<float> binaryFloatDivideOperation(BinaryOperators::DIVISION,
+    BinaryOperationNode<float> binaryFloatDivideOperation(EquationOperators::Types::DIVISION,
                                                           std::make_unique<ConstantNode<float>>(operationValues[0]),
                                                           std::make_unique<ConstantNode<float>>(operationValues[1]));
 
@@ -56,16 +56,16 @@ TEST(ParseTreeTest, BinaryOperationBuilder_Integer)
 {
     std::array<int, 2> operationValues = {1, 2};
 
-    BinaryOperationNode<int> binaryIntAddOperation(BinaryOperators::ADDITION);
+    BinaryOperationNode<int> binaryIntAddOperation(EquationOperators::Types::ADDITION);
     binaryIntAddOperation.setValueA(std::make_unique<ConstantNode<int>>(operationValues[0]));
     binaryIntAddOperation.setValueB(std::make_unique<ConstantNode<int>>(operationValues[1]));
-    BinaryOperationNode<int> binaryIntSubtractOperation(BinaryOperators::SUBTRACTION);
+    BinaryOperationNode<int> binaryIntSubtractOperation(EquationOperators::Types::SUBTRACTION);
     binaryIntSubtractOperation.setValueA(std::make_unique<ConstantNode<int>>(operationValues[0]));
     binaryIntSubtractOperation.setValueB(std::make_unique<ConstantNode<int>>(operationValues[1]));
-    BinaryOperationNode<int> binaryIntMultiplyOperation(BinaryOperators::MULTIPLICATION);
+    BinaryOperationNode<int> binaryIntMultiplyOperation(EquationOperators::Types::MULTIPLICATION);
     binaryIntMultiplyOperation.setValueA(std::make_unique<ConstantNode<int>>(operationValues[0]));
     binaryIntMultiplyOperation.setValueB(std::make_unique<ConstantNode<int>>(operationValues[1]));
-    BinaryOperationNode<int> binaryIntDivideOperation(BinaryOperators::DIVISION);
+    BinaryOperationNode<int> binaryIntDivideOperation(EquationOperators::Types::DIVISION);
     binaryIntDivideOperation.setValueA(std::make_unique<ConstantNode<int>>(operationValues[0]));
     binaryIntDivideOperation.setValueB(std::make_unique<ConstantNode<int>>(operationValues[1]));
 
@@ -79,16 +79,16 @@ TEST(ParseTreeTest, BinaryOperationBuilder_FLOAT)
 {
     std::array<float, 2> operationValues = {1.f, 2.f};
 
-    BinaryOperationNode<float> binaryFloatAddOperation(BinaryOperators::ADDITION);
+    BinaryOperationNode<float> binaryFloatAddOperation(EquationOperators::Types::ADDITION);
     binaryFloatAddOperation.setValueA(std::make_unique<ConstantNode<float>>(operationValues[0]));
     binaryFloatAddOperation.setValueB(std::make_unique<ConstantNode<float>>(operationValues[1]));
-    BinaryOperationNode<float> binaryFloatSubtractOperation(BinaryOperators::SUBTRACTION);
+    BinaryOperationNode<float> binaryFloatSubtractOperation(EquationOperators::Types::SUBTRACTION);
     binaryFloatSubtractOperation.setValueA(std::make_unique<ConstantNode<float>>(operationValues[0]));
     binaryFloatSubtractOperation.setValueB(std::make_unique<ConstantNode<float>>(operationValues[1]));
-    BinaryOperationNode<float> binaryFloatMultiplyOperation(BinaryOperators::MULTIPLICATION);
+    BinaryOperationNode<float> binaryFloatMultiplyOperation(EquationOperators::Types::MULTIPLICATION);
     binaryFloatMultiplyOperation.setValueA(std::make_unique<ConstantNode<float>>(operationValues[0]));
     binaryFloatMultiplyOperation.setValueB(std::make_unique<ConstantNode<float>>(operationValues[1]));
-    BinaryOperationNode<float> binaryFloatDivideOperation(BinaryOperators::DIVISION);
+    BinaryOperationNode<float> binaryFloatDivideOperation(EquationOperators::Types::DIVISION);
     binaryFloatDivideOperation.setValueA(std::make_unique<ConstantNode<float>>(operationValues[0]));
     binaryFloatDivideOperation.setValueB(std::make_unique<ConstantNode<float>>(operationValues[1]));
 

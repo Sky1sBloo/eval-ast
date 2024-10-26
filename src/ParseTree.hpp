@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <variant>
 
-#include "BinaryOperators.hpp"
+#include "EquationOperators.hpp"
 
 class StatementNode;
 
@@ -53,7 +53,7 @@ template <typename T> class ConstantNode : public ExpressionNode<T>
 template <typename T> class BinaryOperationNode : public ExpressionNode<T>
 {
   public:
-    BinaryOperationNode(BinaryOperators operation)
+    BinaryOperationNode(EquationOperators::Types operation)
         : mValueA(std::unique_ptr<ExpressionNode<T>>(nullptr)), mValueB(std::unique_ptr<ExpressionNode<T>>(nullptr)),
           mOperation(operation)
     {
@@ -65,7 +65,7 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
      * @operation that will be used
      * @value ValueB that will be appended
      */
-    BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> value)
+    BinaryOperationNode(EquationOperators::Types operation, std::unique_ptr<ExpressionNode<T>> value)
         : mValueA(std::unique_ptr<ExpressionNode<T>>(nullptr)), mValueB(std::move(value)), mOperation(operation)
     {
     }
@@ -73,7 +73,7 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
     /**
      * Use this for appending new operation
      */
-    BinaryOperationNode(BinaryOperators operation, std::unique_ptr<ExpressionNode<T>> valueA,
+    BinaryOperationNode(EquationOperators::Types operation, std::unique_ptr<ExpressionNode<T>> valueA,
                         std::unique_ptr<ExpressionNode<T>> valueB)
         : mValueA(std::move(valueA)), mValueB(std::move(valueB)), mOperation(operation)
     {
@@ -82,7 +82,7 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
     /**
      * Use this if you prefer to construct the operation types directly
      */
-    BinaryOperationNode(BinaryOperators operation, T valueA, T valueB)
+    BinaryOperationNode(EquationOperators::Types operation, T valueA, T valueB)
         : mValueA(std::make_unique<ConstantNode<T>>(valueA)), mValueB(std::make_unique<ConstantNode<T>>(valueB)),
           mOperation(operation)
     {
@@ -91,7 +91,7 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
     /**
      * Use this for appending new operation
      */
-    BinaryOperationNode(BinaryOperators operation, T value)
+    BinaryOperationNode(EquationOperators::Types operation, T value)
         : mValueA(std::unique_ptr<ExpressionNode<T>>(nullptr)), mValueB(std::make_unique<ConstantNode<T>>(value)),
           mOperation(operation)
     {
@@ -108,13 +108,13 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
 
                 switch (mOperation)
                 {
-                case BinaryOperators::ADDITION:
+                case EquationOperators::Types::ADDITION:
                     return valueA->getValue() + valueB->getValue();
-                case BinaryOperators::SUBTRACTION:
+                case EquationOperators::Types::SUBTRACTION:
                     return valueA->getValue() - valueB->getValue();
-                case BinaryOperators::MULTIPLICATION:
+                case EquationOperators::Types::MULTIPLICATION:
                     return valueA->getValue() * valueB->getValue();
-                case BinaryOperators::DIVISION:
+                case EquationOperators::Types::DIVISION:
                     return valueA->getValue() / valueB->getValue();
                 default:
                     throw std::runtime_error("Binary Operator mOperation uses invalid operation");
@@ -136,7 +136,7 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
         mValueB = std::move(value);
     }
 
-    BinaryOperators getOperation() const
+    EquationOperators::Types getOperation() const
     {
         return mOperation;
     }
@@ -149,7 +149,7 @@ template <typename T> class BinaryOperationNode : public ExpressionNode<T>
   protected:
     ExpressionNodeContainer<T> mValueA;
     ExpressionNodeContainer<T> mValueB;
-    const BinaryOperators mOperation;
+    const EquationOperators::Types mOperation;
 };
 
 template <typename T> class PrintNode : public StatementNode
