@@ -29,3 +29,17 @@ constexpr int EquationOperators::getOperatorPrecedence(Types type)
 
     return -1;
 }
+
+
+constexpr std::optional<EquationOperators::Types> EquationOperators::getOperatorFromChar(char ch)
+{
+    for (const TypeParameters &param : operatorParameters)
+    {
+        if (ch == param.symbol)
+        {
+            return param.type;
+        }
+    }
+
+    return std::nullopt;
+}

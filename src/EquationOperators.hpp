@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <unordered_map>
+#include <optional>
 
 class EquationOperators
 {
@@ -29,7 +30,11 @@ class EquationOperators
      * @return -1 if invalid type
      */
     static constexpr int getOperatorPrecedence(Types type);
-    static constexpr Types getOperatorFromChar(char ch);
+
+    /**
+     * Retrieves operator from character
+     */
+    static constexpr std::optional<Types> getOperatorFromChar(char ch);
 
   private:
     static constexpr std::array<TypeParameters, 6> operatorParameters = {{{Types::ADDITION, 2, '+'},
