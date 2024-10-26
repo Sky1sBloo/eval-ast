@@ -1,13 +1,13 @@
 #pragma once
 #include <array>
 #include <unordered_map>
-#include <optional>
 
 class EquationOperators
 {
   public:
     enum class Types
     {
+        INVALID,
         ADDITION,
         SUBTRACTION,
         MULTIPLICATION,
@@ -34,10 +34,11 @@ class EquationOperators
     /**
      * Retrieves operator from character
      */
-    static constexpr std::optional<Types> getOperatorFromChar(char ch);
+    static constexpr Types getOperatorFromChar(char ch);
 
   private:
-    static constexpr std::array<TypeParameters, 6> operatorParameters = {{{Types::ADDITION, 2, '+'},
+    static constexpr std::array<TypeParameters, 7> operatorParameters = {{{Types::INVALID, -1, ' '},
+                                                                          {Types::ADDITION, 2, '+'},
                                                                           {Types::SUBTRACTION, 2, '-'},
                                                                           {Types::MULTIPLICATION, 3, '*'},
                                                                           {Types::DIVISION, 3, '/'},

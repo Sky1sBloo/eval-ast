@@ -26,12 +26,11 @@ constexpr int EquationOperators::getOperatorPrecedence(Types type)
             return param.precedence;
         }
     }
-
     return -1;
 }
 
 
-constexpr std::optional<EquationOperators::Types> EquationOperators::getOperatorFromChar(char ch)
+constexpr EquationOperators::Types EquationOperators::getOperatorFromChar(char ch)
 {
     for (const TypeParameters &param : operatorParameters)
     {
@@ -40,6 +39,6 @@ constexpr std::optional<EquationOperators::Types> EquationOperators::getOperator
             return param.type;
         }
     }
-
-    return std::nullopt;
+    
+    return Types::INVALID;
 }
