@@ -19,5 +19,13 @@ constexpr bool EquationOperators::ischarBinaryOperator(char ch)
 
 constexpr int EquationOperators::getOperatorPrecedence(Types type) 
 {
-    
+    for (const TypeParameters &param : operatorParameters)
+    {
+        if (type == param.type)
+        {
+            return param.precedence;
+        }
+    }
+
+    return -1;
 }

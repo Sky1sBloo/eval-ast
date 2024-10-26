@@ -23,6 +23,11 @@ class EquationOperators
     };
 
     static constexpr bool ischarBinaryOperator(char ch);
+    /**
+     * Retrieves operator precedence from type
+     *
+     * @return -1 if invalid type
+     */
     static constexpr int getOperatorPrecedence(Types type);
     static constexpr Types getOperatorFromChar(char ch);
 
