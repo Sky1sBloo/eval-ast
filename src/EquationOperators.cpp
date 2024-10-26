@@ -17,7 +17,7 @@ constexpr bool EquationOperators::ischarBinaryOperator(char ch)
 }
 
 
-constexpr int EquationOperators::getOperatorPrecedence(Types type) 
+constexpr int EquationOperators::getPrecedence(Types type) 
 {
     for (const TypeParameters &param : operatorParameters)
     {

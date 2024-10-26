@@ -2,6 +2,9 @@
 #include <array>
 #include <unordered_map>
 
+/**
+ * Class for operating equation operators
+ */
 class EquationOperators
 {
   public:
@@ -16,20 +19,18 @@ class EquationOperators
         CLOSE_PARENTHESIS
     };
 
-    struct TypeParameters
-    {
-        Types type;
-        int precedence;
-        char symbol;
-    };
 
+    /**
+     * Checks if the given char is binary operator
+     * (this excludes open and close parenthesis)
+     */
     static constexpr bool ischarBinaryOperator(char ch);
     /**
      * Retrieves operator precedence from type
      *
      * @return -1 if invalid type
      */
-    static constexpr int getOperatorPrecedence(Types type);
+    static constexpr int getPrecedence(Types type);
 
     /**
      * Retrieves operator from character
@@ -37,6 +38,19 @@ class EquationOperators
     static constexpr Types getOperatorFromChar(char ch);
 
   private:
+    /**
+     * Struct holding operator information
+     */
+    struct TypeParameters
+    {
+        Types type;
+        int precedence;
+        char symbol;
+    };
+
+    /**
+     * Holds operator information
+     */
     static constexpr std::array<TypeParameters, 7> operatorParameters = {{{Types::INVALID, -1, ' '},
                                                                           {Types::ADDITION, 2, '+'},
                                                                           {Types::SUBTRACTION, 2, '-'},
