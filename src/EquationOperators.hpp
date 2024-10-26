@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <unordered_map>
 
 class EquationOperators
@@ -14,9 +15,24 @@ class EquationOperators
         CLOSE_PARENTHESIS
     };
 
+    struct TypeParameters
+    {
+        Types type;
+        int precedence;
+        char symbol;
+    };
+
+    constexpr bool ischarBinaryOperator(char ch) const;
+    constexpr int getOperatorPrecedence(Types type) const;
+    Types getOperatorFromChar(char ch) const;
+
   private:
-    static const std::unordered_map<Types, int> precedence; 
-    static const std::unordered_map<char, Types> operatorCharacters;
+    static constexpr std::array<TypeParameters, 6> operatorParameters = {{{Types::ADDITION, 2, '+'},
+                                                                          {Types::SUBTRACTION, 2, '-'},
+                                                                          {Types::MULTIPLICATION, 3, '*'},
+                                                                          {Types::DIVISION, 3, '/'},
+                                                                          {Types::OPEN_PARENTHESIS, 1, '('},
+                                                                          {Types::CLOSE_PARENTHESIS, 1, ')'}}};
 };
 
 enum class BinaryOperators
