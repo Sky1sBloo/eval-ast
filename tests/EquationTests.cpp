@@ -5,6 +5,8 @@
 
 template <typename... tVisit>
 struct Visitor : tVisit... { using tVisit::operator()...; };
+
+template <typename... tVisit> Visitor(tVisit...) -> Visitor<tVisit...>;
 TEST (EQUATION_TEST, BINARY_OPERATION)
 {
     std::string constantValues = "2+3";
