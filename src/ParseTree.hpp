@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <variant>
 
-#include "BinaryOperators.hpp"
+#include "EquationOperators.hpp"
 
 class StatementNode;
 

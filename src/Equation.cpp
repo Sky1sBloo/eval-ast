@@ -1,6 +1,5 @@
 #include "Equation.hpp"
 
-#include "BinaryOperators.hpp"
 #include <cctype>
 #include <stack>
 

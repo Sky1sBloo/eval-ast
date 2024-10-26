@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <array>
 
-#include "BinaryOperators.hpp"
+#include "EquationOperators.hpp"
 #include "ParseTree.hpp"
 
 

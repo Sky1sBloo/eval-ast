@@ -3,7 +3,7 @@
 #include <string>
 #include <queue>
 #include <variant>
-#include "BinaryOperators.hpp"
+#include "EquationOperators.hpp"
 
 template<typename T>
 using PostFixContainer = std::variant<T, BinaryOperators>;

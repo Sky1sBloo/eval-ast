@@ -1,13 +1,24 @@
 #pragma once
-#include <string_view>
 #include <unordered_map>
 
 class EquationOperators
 {
-public:
-private:
+  public:
+    enum class Types
+    {
+        ADDITION,
+        SUBTRACTION,
+        MULTIPLICATION,
+        DIVISION,
+        OPEN_PARENTHESIS,
+        CLOSE_PARENTHESIS
+    };
 
+  private:
+    static const std::unordered_map<Types, int> precedence; 
+    static const std::unordered_map<char, Types> operatorCharacters;
 };
+
 enum class BinaryOperators
 {
     ADDITION,
@@ -39,7 +50,8 @@ static const std::unordered_map<char, BinaryOperators> operatorCharacters = {
  */
 inline bool isCharBinaryOperator(char ch)
 {
-    if (ch == '(' || ch == ')')  return false;
+    if (ch == '(' || ch == ')')
+        return false;
     return operatorCharacters.find(ch) != operatorCharacters.end();
 }
 

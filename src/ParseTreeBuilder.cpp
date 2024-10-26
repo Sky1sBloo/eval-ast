@@ -1,5 +1,5 @@
 #include "ParseTreeBuilder.hpp"
-#include "BinaryOperators.hpp"
+#include "EquationOperators.hpp"
 #include "Equation.hpp"
 #include "ParseTree.hpp"
 
