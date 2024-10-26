@@ -19,23 +19,57 @@ class EquationOperators
         CLOSE_PARENTHESIS
     };
 
-
     /**
      * Checks if the given char is binary operator
      * (this excludes open and close parenthesis)
      */
-    static constexpr bool ischarBinaryOperator(char ch);
+    static constexpr bool isCharBinaryOperator(char ch)
+    {
+        if (ch == '(' || ch == ')')
+            return false;
+
+        for (const TypeParameters &param : operatorParameters)
+        {
+            if (ch == param.symbol)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
     /**
      * Retrieves operator precedence from type
      *
      * @return -1 if invalid type
      */
-    static constexpr int getPrecedence(Types type);
+    static constexpr int getPrecedence(Types type)
+    {
+        for (const TypeParameters &param : operatorParameters)
+        {
+            if (type == param.type)
+            {
+                return param.precedence;
+            }
+        }
+        return -1;
+    }
 
     /**
      * Retrieves operator from character
      */
-    static constexpr Types getOperatorFromChar(char ch);
+    static constexpr Types getOperatorFromChar(char ch)
+    {
+        for (const TypeParameters &param : operatorParameters)
+        {
+            if (ch == param.symbol)
+            {
+                return param.type;
+            }
+        }
+
+        return Types::INVALID;
+    }
 
   private:
     /**
@@ -60,55 +94,3 @@ class EquationOperators
                                                                           {Types::CLOSE_PARENTHESIS, 1, ')'}}};
 };
 
-enum class BinaryOperators
-{
-    ADDITION,
-    SUBTRACTION,
-    MULTIPLICATION,
-    DIVISION,
-    OPEN_PARENTHESIS,
-    CLOSE_PARENTHESIS
-};
-
-enum class BinaryDirection
-{
-    LEFT,
-    RIGHT
-};
-
-static const std::unordered_map<BinaryOperators, int> operatorPrecedence = {
-    {BinaryOperators::ADDITION, 2}, {BinaryOperators::SUBTRACTION, 2},      {BinaryOperators::MULTIPLICATION, 3},
-    {BinaryOperators::DIVISION, 3}, {BinaryOperators::OPEN_PARENTHESIS, 1}, {BinaryOperators::CLOSE_PARENTHESIS, 1}};
-
-static const std::unordered_map<char, BinaryOperators> operatorCharacters = {
-    {'+', BinaryOperators::ADDITION},         {'-', BinaryOperators::SUBTRACTION},
-    {'*', BinaryOperators::MULTIPLICATION},   {'/', BinaryOperators::DIVISION},
-    {'(', BinaryOperators::OPEN_PARENTHESIS}, {')', BinaryOperators::CLOSE_PARENTHESIS}};
-
-/**
- * Checks if the character is an operator
- * Doesn't include parenthesis
- */
-inline bool isCharBinaryOperator(char ch)
-{
-    if (ch == '(' || ch == ')')
-        return false;
-    return operatorCharacters.find(ch) != operatorCharacters.end();
-}
-
-/**
- * Returns the operator precedence
- */
-inline int getOperatorPrecedence(BinaryOperators op)
-{
-    return operatorPrecedence.at(op);
-}
-
-/**
- * Returns the operator from character
- * Recommended to check if char is binary operator first
- */
-inline BinaryOperators getOperatorFromChar(char ch)
-{
-    return operatorCharacters.at(ch);
-}

@@ -6,7 +6,7 @@
 #include "EquationOperators.hpp"
 
 template<typename T>
-using PostFixContainer = std::variant<T, BinaryOperators>;
+using PostFixContainer = std::variant<T, EquationOperators::Types>;
 
 /**
  * Class representing an equation
